@@ -3,9 +3,10 @@ from django import forms
 
 class SearchForm (forms.Form):
     query = forms.CharField(label='Query')
-    source_id = forms.CharField(label='Source ID')
-    date_restriction_start = forms.DateField(label='From')
-    date_restriction_end = forms.DateField(label='To')
+    project_id = forms.IntegerField(label='Source ID')
+    source_id = forms.IntegerField(label='Source ID')
+    date_restriction_start = forms.DateField(label='From', required=False)
+    date_restriction_end = forms.DateField(label='To', required=False)
     search_method = forms.ChoiceField(
         label='Search Method',
         choices=(
@@ -39,5 +40,5 @@ class SearchForm (forms.Form):
             ('full_text_with_terms', 'Full Text With Terms')
         )
     )
-    range_begin = forms.IntegerField(label='Begin')
-    range_end = forms.IntegerField(label='End')
+    range_begin = forms.IntegerField(label='Begin', required=False)
+    range_end = forms.IntegerField(label='End', required=False)

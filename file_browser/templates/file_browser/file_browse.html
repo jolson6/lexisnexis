@@ -1,1 +1,7 @@
 <div>Browse Here</div>
+
+<form action="{% url 'file_browse' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Search</button>
+</form>
