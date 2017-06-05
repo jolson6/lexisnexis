@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://reportdocumentuse.retrieval.services.v1.wsapi.lexisnexis.com" 
+		xmlns:tns="http://reportdocumentuse.retrieval.services.v1.wsapi.lexisnexis.com" 
+		xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+		xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+		xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com" 
+		elementFormDefault="qualified" 
+		attributeFormDefault="unqualified" 
+		version="1.0">
+
+	<import namespace="http://result.common.services.v1.wsapi.lexisnexis.com" 
+	        schemaLocation="Result.xsd"/>
+
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" 
+	        schemaLocation="Security.xsd"/>
+
+	<element name="ReportDocumentUse" type="tns:ReportDocumentUse">
+		<annotation>
+			<documentation>
+			At periodic intervals (based on the terms of your organization's agreement with LexisNexis), your user-agent applications must issue a <b><i>ReportDocumentUse</i></b> message for those documents that were accessed from your local server.
+			<p>
+			This request message contains the following pieces of information for each document accessed:</p>
+			<ul>
+			<li>the <b><i>documentToken</i></b> element which contains the encrypted information needed to calculate the correct royalty payment (document ID, rate, vendor, etc.) and</li>
+			<br></br><br></br>
+			<li>the <b><i>numberOfAccesses</i></b> element which contains the number of accesses since it was last reported.</li>
+			</ul>
+			<p>
+			If the document access count reports were received successfully, the Web Services Kit responds with an empty message. Otherwise, the message identifies those 
+			document access count reports that were not reported successfully and it gives a reason for each failure. These document access count reports will need to be re-
+			submitted.</p>
+			<p>
+			After a document access count report has been successfully reported, the counters should be reset to prevent those accesses from being reported again.</p>
+			</documentation>
+		</annotation>
+	</element>
+	<element name="ReportDocumentUseResponse" type="tns:ReportDocumentUseResponse">
+		<annotation>
+			<documentation>Encloses the ReportDocument response parameters.</documentation>
+		</annotation>
+	</element>
+
+	<!-- Define request types -->
+	<complexType name="ReportDocumentUse">
+		<sequence>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken" minOccurs="1" maxOccurs="1">
+				<annotation>
+					<documentation>
+						<example>e7f6ab66b6cc6a8748389ab987c98f89e7f</example>Security token that must be provided on all non-authentication
+                         requests.</documentation>
+				</annotation>
+			</element>
+			<element name="DocumentRecordList" type="tns:DocumentRecordList">
+				<annotation>
+					<documentation>Encloses one or more DocumentRecord elements which each represent a single document access count report.
+                    </documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="DocumentRecordList">
+		<sequence>
+			<element name="DocumentRecord" type="tns:DocumentRecord" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Encloses the documentToken and numberOfAccesses elements.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="DocumentRecord">
+		<sequence>
+			<element name="documentToken" type="string">
+				<annotation>
+					<documentation>
+						<example>826fac5efe990afb2ce86db47864cd4e6374f04ee38b32b7d024d24d83089cc30ca0afbe46172ed49e9cda5a01610b90e30689cb5f99ab14859ada18163083bc6d2695d890debd5fbf369aa67811dee60e28f81a8e34858c4ef557290a5d461a224dd14a0fa863f1b1a7a51838497c577c0524830f833d90a0ef1241cac4dd8864db6cfca6367180eb6fda1acc98c116</example>
+                        Contains the documentToken value that is embedded in the document for which accesses are being reported.
+					    This token represents information about the original search and retrieval that is needed to process the royalty data.
+				  </documentation>
+				</annotation>
+			</element>
+			<element name="numberOfAccesses" type="integer">
+				<annotation>
+					<documentation>
+						<example>25</example>Identifies the number of times the particular document was accessed at its remote location.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<!-- Define response types -->
+	<complexType name="ReportDocumentUseResponse">
+		<sequence>
+			<element name="UnreportedDocumentRecordList" type="tns:UnreportedDocumentRecordList" minOccurs="0">
+				<annotation>
+					<documentation>A list of unreported document records.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="UnreportedDocumentRecordList">
+		<sequence>
+			<element name="UnreportedDocumentRecord" type="tns:UnreportedDocumentRecord" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Encloses the documentToken and numberOfAccesses elements.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="UnreportedDocumentRecord">
+		<sequence>
+			<element name="documentToken" type="string">
+				<annotation>
+					<documentation>
+						<example>826fac5efe990afb2ce86db47864cd4e6374f04ee38b32b7d024d24d83089cc30ca0afbe46172ed49e9cda5a01610b90e30689cb5f99ab14859ada18163083bc6d2695d890debd5fbf369aa67811dee60e28f81a8e34858c4ef557290a5d461a224dd14a0fa863f1b1a7a51838497c577c0524830f833d90a0ef1241cac4dd8864db6cfca6367180eb6fda1acc98c116</example>The document&apos;s royalty token.  This is the document token attribute
+				  found in the doc element of documents retrieved through LNDA.</documentation>
+				</annotation>
+			</element>
+			<element name="numberOfAccesses" type="integer">
+				<annotation>
+					<documentation>
+						<example>25</example>The number of times that the document has been accessed.</documentation>
+				</annotation>
+			</element>
+			<element name="reasonForFailure" type="result:ReportFailureReason">
+				<annotation>
+					<documentation>
+						<example>Invalid Document Token</example>
+						Identifies the reason the document report was not accepted.
+						</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

@@ -1,7 +1,20 @@
-<div>Browse Here</div>
+<h3>Search Here</h3>
 
-<form action="{% url 'file_browse' %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Search</button>
-</form>
+<div>
+    <form action="{% url 'file_browse' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+<br><br>
+
+<h4> Documents Found: {{ documents_found }}</h4>
+<ol>
+    {% for number, document in documents.items %}
+        <li>
+            <a href="#" target="_blank">Document #{{ number }}</a>
+        </li>
+    {% endfor %}
+</ol>

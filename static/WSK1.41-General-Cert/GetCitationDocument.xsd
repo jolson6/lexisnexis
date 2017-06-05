@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://getcitationdocument.citator.services.v1.wsapi.lexisnexis.com"
+        xmlns:tns="http://getcitationdocument.citator.services.v1.wsapi.lexisnexis.com"
+        xmlns:citecommon="http://citator.common.services.v1.wsapi.lexisnexis.com"
+		xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+        xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com"
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+
+  <import namespace="http://citator.common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="CitatorCommon.xsd"/>
+  <import namespace="http://common.services.v1.wsapi.lexisnexis.com" 
+          schemaLocation="Common.xsd"/>
+  <import namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+        schemaLocation="Result.xsd"/>
+  <import namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Security.xsd"/>
+
+  <element name="GetCitationDocument" type="tns:GetCitationDocument">
+    <annotation><documentation>
+    This operation takes either a citation and country code or a citation ID token and returns a corresponding citation document (case or statute).
+	In the case of a non-unique citation (table case), multiple citation documents are returned. The retrieval options for the citation document will 
+	be similar to that of other retrieval-based services with one exception: a Dynamic format will be added to list of available formats. 
+	
+	If a user selects Dynamic format, a Full format will be used if only one document is returned and a Cite format used if more than one document is returned. 
+	Such non-unique cases will provide the document tokens for each document so that full text versions of the document can subsequently be retrieved.
+	A simple Boolean flag in the response will indicate whether or not a fallback occurred during normalization of the citation.
+    Optionally, more detailed fallback information such as the fallback citation can be returned.
+
+    
+
+    </documentation></annotation>
+  </element>
+
+  <element name="GetCitationDocumentResponse" type="tns:GetCitationDocumentResponse">
+    <annotation><documentation>
+    The response message contains the one or more documents specified in the requested format and markup.
+
+    </documentation></annotation>
+  </element>
+
+  <!-- Request type declarations -->
+  <complexType name="GetCitationDocument">
+    <sequence>
+      <element name="locale" type="common:Locale" minOccurs="0">
+      <annotation><documentation>
+      Optional locale indicating the language of the request.
+      </documentation></annotation>
+      </element>
+      <element name="binarySecurityToken" type="security:BinarySecurityToken">
+        <annotation><documentation>
+        Security token that must be provided on all non-authentication requests.
+        Example:  f4348ad8876542bc93748c89fb98a7e
+        </documentation></annotation>
+      </element>
+      <element name="citationInformation" type="tns:CitationInformation">
+        <annotation><documentation>
+        Structure that contains elements corresponding to the identification of a legal 
+        citation.</documentation></annotation>
+      </element>
+      <element name="options" type="tns:Options" minOccurs="0"/>
+      <element name="projectId" type="common:ProjectId" minOccurs="0">
+		<annotation>
+		  <documentation>
+				<example>Research Project 001</example>
+				Used for client or project identification purposes.  This 
+	       		identifier will be associated with each search transaction 
+	      		and will be reported on your organization&apos;s invoice.
+		 </documentation>
+		</annotation>
+	  </element>
+    </sequence>
+  </complexType>
+
+  <complexType name="CitationInformation">
+    <sequence>
+      <element name="citation" type="citecommon:Citation" minOccurs="0">
+        <annotation><documentation>
+        Citation/country combination used to identify a legal citation.
+        Mutually exclusive of the citationId element.  One or the other
+        must be specified.  
+        </documentation></annotation>
+      </element>
+      <element name="citationId" type="string" minOccurs="0">
+        <annotation><documentation>
+        Opaque token containing pertinent information used to identify a legal 
+        citation.  Mutually exclusive of the citation element.  One or the
+        other must be specified.
+        </documentation></annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+  <complexType name="Options">
+    <sequence>
+      <element name="includeFallbackDetail" type="boolean" minOccurs="0">
+        <annotation><documentation>
+        Contains an opaque token containing pertinent information used to identify a legal citation.
+	    Mutually exclusive of the citation element. One or the other must be specified.
+		Enter true to include the status information of detailed fallback information when a fallback condition exists.
+        </documentation></annotation>
+      </element>
+      <element name="documentFormatOptions" type="result:CitationDocumentFormatOptions" minOccurs="0">
+        <annotation><documentation>
+        Optional selectors for indicating the markup and format of the returned document(s).  
+        Selecting "Dynamic" (the default option) for the document view will return a document in 
+        fulltext format in the selected markup when there is only a single document in the result set 
+        and will return documents in cite list format in the selected markup when the result set 
+        contains multiple documents.  
+        </documentation></annotation>
+      </element>
+      <element name="includeShepardsSignals" type="boolean" minOccurs="0">
+        <annotation>
+          <documentation>Allows the retrieval of Shepard's Signals.</documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+  <!-- Response type declarations -->
+  <complexType name="GetCitationDocumentResponse">
+    <sequence>
+			<element name="searchId" type="string">
+        <annotation><documentation>
+	      Unique identifier that maintains all pertinent information
+	      from the original search.
+	      </documentation></annotation>
+			</element>
+			<element name="documentsFound" type="result:DocumentsFound">
+				<annotation><documentation>
+				Number of citation documents found.
+				</documentation></annotation>
+			</element>
+      <element name="documentContainerList" type="result:DocumentContainerList">
+        <annotation><documentation>
+        List of document containers (documents and metadata).
+        </documentation></annotation>
+      </element>
+      <element name="statusInformation" type="tns:StatusInformation">
+        <annotation><documentation>
+        Structure detailing the outcome of the request and optionally containing detailed
+        fallback status information.
+        </documentation></annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+  <complexType name="StatusInformation">
+    <sequence>
+      <element name="status" type="tns:Status">
+        <annotation><documentation>
+        Enumeration indicating the outcome of the citation request.
+        </documentation></annotation>
+      </element>
+      <element name="fallback" type="boolean">
+        <annotation><documentation>
+        Flag indicating the absence or presence of a "fallback" condition; i.e. the
+        legal citation specified in the request references somewhere other than the 
+        beginning of the well-known reference for the legal document.
+
+		True indicates the presence of a "fallback" condition; i.e. the legal citation specified in the request
+	    references somewhere other than the beginning of the well-known reference for the legal document.
+        </documentation></annotation>
+      </element>
+      <element name="fallbackDetail" type="tns:FallbackDetail" minOccurs="0">
+        <annotation><documentation>
+        Optional structure providing detailed information regarding a fallback condition.
+        Supplied only when requested (includeFallbackDetail = true).
+        </documentation></annotation>
+      </element>
+      <element name="reporter" type="string" minOccurs="0">
+        <annotation><documentation>
+        Reporter string returned only when the request contains a malformed legal
+        citation that contains a valid reporter (status = InvalidCiteFormatValidReporter).
+        </documentation></annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+  <simpleType name="Status">
+    <restriction base="string">
+      <enumeration value="Ok"/>
+      <enumeration value="OkFallback"/>
+      <enumeration value="OkAmbiguousTableCase"/>
+      <enumeration value="DocumentNotFound"/>
+      <enumeration value="InvalidCiteFormatValidReporter"/>
+    </restriction>
+  </simpleType>
+
+  <complexType name="FallbackDetail">
+    <sequence>
+      <element name="fallbackType" type="tns:FallbackType">
+        <annotation><documentation>
+        Enumeration that indicates what type of fallback occurred, if any.
+        </documentation></annotation>
+      </element>
+      <element name="fallbackCitation" type="string" minOccurs="0">
+        <annotation><documentation>
+        The citation of the document that was resolved after fallback 
+        processing. Empty unless fallback occurred.
+        </documentation></annotation>
+      </element>
+      <element name="fallbackPage" type="string" minOccurs="0">
+        <annotation><documentation>
+        If fallback occurred to the nearest previous document or paragraph, the page 
+        that was returned.
+        </documentation></annotation>
+      </element>
+      <element name="fallbackParagraph" type="string" minOccurs="0">
+        <annotation><documentation>
+        This is the paragraph that was returned if fallback occurred 
+		to the nearest previous document or paragraph.
+        </documentation></annotation>
+      </element>
+      <element name="fallbackAnchor" type="string" minOccurs="0">
+        <annotation><documentation>
+   		Contains a value to be used to jump to a specified page, paragraph, 
+		or other intra-document fallback reference.
+        </documentation></annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+  <simpleType name="FallbackType">
+    <restriction base="string">
+      <enumeration value="None"/>
+      <enumeration value="Citation"/>
+      <enumeration value="Page"/>
+      <enumeration value="Paragraph"/>
+      <enumeration value="Other"/>
+    </restriction>
+  </simpleType>
+
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2005 by LexisNexis
+  All Rights Reserved
+-->

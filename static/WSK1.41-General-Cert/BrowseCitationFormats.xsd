@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://browsecitationformats.ldc.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://browsecitationformats.ldc.services.v1.wsapi.lexisnexis.com" 
+        xmlns:ldccommon="http://ldccommon.common.services.v1.wsapi.lexisnexis.com"
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"
+        version="1.0">
+
+  <import namespace="http://ldccommon.common.services.v1.wsapi.lexisnexis.com" schemaLocation="LDCCommon.xsd"/>
+  <import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" schemaLocation="Security.xsd"/>
+
+  <!-- Message elements -->
+  <element name="BrowseCitationFormats" type="tns:BrowseCitationFormats">
+    <annotation>
+      <documentation>
+       Represents a search for getting the information regarding the citation formats by passing either the start character or the partition key.    </documentation>
+    </annotation>
+  </element>
+
+  <element name="BrowseCitationFormatsResponse" type="tns:BrowseCitationFormatsResponse">
+    <annotation>
+      <documentation>
+        The response from a BrowseCitationFormats is a set of search results,   
+        containing information regarding the source details and the partition details.
+       </documentation>
+    </annotation>
+  </element>
+  <!-- Types -->
+  <complexType name="BrowseCitationFormats">
+    <sequence>
+      <element name="binarySecurityToken" type="security:BinarySecurityToken">
+        <annotation>
+          <documentation>
+            <example>f4348ad8876542bc93748c89fb98a7e</example>
+            Security token that must be provided on all non-authentication
+            requests.
+          </documentation>
+        </annotation>
+      </element>
+	  <element name="startCharacter" type="tns:startCharacter" minOccurs ="0">
+		<annotation>
+			<documentation>
+				<example>D</example>
+				Start Character :  single alphbet character </documentation>
+		</annotation>
+	  </element>
+	   <element name="partitionKey" type="long" minOccurs="0">
+		<annotation>
+			<documentation>
+				<example>10087871</example>
+				Partition Key 
+			</documentation>
+		</annotation>
+	  </element>
+     </sequence>
+  </complexType>
+
+  <simpleType name ="startCharacter">
+  	<restriction base= "string">
+  	<pattern value="[a-zA-Z]"></pattern>
+  	</restriction>
+  </simpleType>
+  
+  <!-- Response -->	
+	<complexType name="BrowseCitationFormatsResponse">
+		<sequence>
+			<element name = "partitionList" type="ldccommon:CfaPartitionDetailsList" minOccurs="0">
+				<annotation>
+					<documentation>
+				Represents the information regarding the partitionkey,firstcfasourcename and lastcfasourcename			
+					</documentation>
+				</annotation>
+			</element>
+			<element name = "cfaSourceList" type="ldccommon:CfaSourceDetailsList" minOccurs="0">
+				<annotation>
+					<documentation>
+				Represents the information regarding the source key, source name and reporter format					
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+  
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2010 by LexisNexis
+  All Rights Reserved
+-->

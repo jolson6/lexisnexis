@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ldccommon.common.services.v1.wsapi.lexisnexis.com" 
+xmlns:tns="http://ldccommon.common.services.v1.wsapi.lexisnexis.com"
+xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com" 
+elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+
+<import namespace="http://result.common.services.v1.wsapi.lexisnexis.com" schemaLocation="Result.xsd"/>
+
+	<complexType name="LDCRetrievalOptions">
+		<complexContent>
+			<extension base="result:DocumentFormatOptions">
+				<sequence>
+					<element name="documentRange" type="result:Range" minOccurs="0">
+						<annotation>
+							<documentation>Defines the range of documents to be retrieved.</documentation>
+						</annotation>
+					</element>
+					<element name="includeExtendedOutput" type="boolean" minOccurs="0">
+						<annotation>
+							<documentation>
+								<example>true</example>
+							</documentation>
+						</annotation>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	
+	<simpleType name="CitationAttribute">
+		<restriction base="string">
+			<enumeration value="REQUIRED"/>
+			<enumeration value="OPTIONAL" />
+			<enumeration value="NOTUSED" />
+		</restriction>
+	</simpleType>
+	
+	<complexType name="CfaSourceKeyList">
+		<sequence>
+			<element name="cfaSource" type="tns:CfaSource" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>CFA source</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	
+	<complexType name="CfaSourceDetailsList">
+		<sequence>
+			<element name="cfaSourceDetails" type="tns:CfaSourceDetails" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>CFA source details </documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	
+	<complexType name="CfaSourceFullDetailsList">
+		<sequence>
+			<element name="cfaSourceFullDetails" type="tns:CfaSourceFullDetails" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>CFA source full details</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="CfaPartitionDetailsList">
+		<sequence>
+			<element name="cfaPartionDetails" type="tns:CfaPartitionDetails" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>CFA Partition details </documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	
+	<complexType name="CfaSource">
+		<sequence>
+			<element name="cfaSourceKey" type="string">
+				<annotation>
+					<documentation>A CFA Source Key</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	
+	<complexType name="CfaSourceDetails">
+	  <complexContent>
+		<extension base="tns:CfaSource">
+			<sequence>
+				<element name="cfaSourceName" type="string">
+					<annotation>
+						<documentation>A CFA Source Name</documentation>
+					</annotation>
+				</element>
+				<element name="reporterFormat" type="string">
+					<annotation>
+						<documentation>A Reporter Format Name</documentation>
+					</annotation>
+				</element>
+			</sequence>
+		</extension>
+	   </complexContent>
+	</complexType>
+
+	<complexType name="CfaPartitionDetails">
+			<sequence>
+				<element name="partitionKey"  type="long">
+					<annotation>
+						<documentation>Partition Key value</documentation>
+					</annotation>
+				</element>
+				<element name="firstCfaSourceName" type="string">
+					<annotation>
+						<documentation>A first CFA Source Name</documentation>
+					</annotation>
+				</element>
+				<element name="lastCfaSourceName" type="string">
+					<annotation>
+						<documentation>A last CFA Source Name</documentation>
+					</annotation>
+				</element>
+			</sequence>
+	</complexType>
+	
+	
+	
+	<complexType name="CfaSourceFullDetails">
+	  <complexContent>
+		<extension base="tns:CfaSourceDetails">
+			<sequence>
+				<element name="citationPrefix" type="tns:CitationAttribute">
+					<annotation>
+						<documentation>A Citation Prefix</documentation>
+					</annotation>
+				</element>
+				<element name="citationSuffix" type="tns:CitationAttribute">
+					<annotation>
+						<documentation>A Citation Suffix</documentation>
+					</annotation>
+				</element>
+				<element name="multiSampleInfoText" type="string">
+					<annotation>
+						<documentation>multiSampleInfoText</documentation>
+					</annotation>
+				</element>
+				<element name="sampleCitationList" type="tns:sampleCitationList" minOccurs="0" maxOccurs="1">
+					<annotation>
+						<documentation>sampleCitationList</documentation>
+					</annotation>
+				</element>
+				<element name="countryCode" type="string" minOccurs="1" default="USA">
+					<annotation>
+					<documentation>
+					</documentation>
+					</annotation>
+			    </element>
+			</sequence>
+		</extension>
+	   </complexContent>
+	</complexType>
+	
+	<complexType name="sampleCitationList">
+		<sequence>
+			<element name="sampleCitation" type="tns:SampleCitation" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>sampleCitation</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	
+	<complexType name="SampleCitation">
+		<sequence>
+			<element name="sampleCitationText" type="string">
+				<annotation>
+					<documentation>sampleCitationText</documentation>
+				</annotation>
+			</element>
+			<element name="coverage" type="string">
+				<annotation>
+					<documentation>coverages</documentation>
+				</annotation>
+			</element>			
+		</sequence>
+	</complexType>
+</schema>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://common.search.services.v1.wsapi.lexisnexis.com"
+        xmlns:tns="http://common.search.services.v1.wsapi.lexisnexis.com"
+        xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com"
+		xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"
+        version="1.0">
+
+  <import namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+        schemaLocation="Result.xsd"/>
+  <import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+		schemaLocation="Common.xsd"/>
+
+  <!-- Common search request type definitions -->
+  <complexType name="SourceInformationChoice">
+    <sequence>
+      <element name="sourceIdList" type="common:SourceIdList" minOccurs="0">
+        <annotation>
+          <documentation>
+            A grouping of LexisNexis sources.  Mutually exclusive of
+            the securedSourceId element.
+          </documentation>
+        </annotation>
+      </element>
+      <element name="securedSourceId" type="string" minOccurs="0">
+        <annotation>
+          <documentation>
+            Unique identifier for a "secured" LexisNexis source.  Mutually
+            exclusive of the sourceIdList element.
+          </documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+  <simpleType name="SearchMethod">
+  	<restriction base="string">
+  		<enumeration value="Boolean" />
+  		<enumeration value="MatchOnAllWords" />
+  		<enumeration value="MatchOnAnyWord" />
+  		<enumeration value="MatchOnPhrase" />
+  		<enumeration value="QuickSearch" />
+  		<enumeration value="BooleanWithContinue" />
+  		<enumeration value="BooleanWithNaturalLanguageContinue" />
+  		<enumeration value="Freestyle" />
+  		<enumeration value="Raw" />
+  		<enumeration value="BooleanWithDecompounding" />
+  		<enumeration value="MoreLikeSelectedText" />
+   		<enumeration value="EasySearch" />
+  	</restriction>
+  </simpleType>
+
+  <complexType name="DateRestriction">
+  	<sequence>
+  		<element name="startDate" type="date" minOccurs="0">
+  			<annotation>
+  				<documentation>
+  					<example>2004-03-21</example>
+  					"From" date of date restriction (inclusive).
+  				</documentation>
+  			</annotation>
+  		</element>
+  		<element name="endDate" type="date" minOccurs="0">
+  			<annotation>
+  				<documentation>
+  					<example>2004-04-21</example>
+  					"To" date of date restriction (inclusive).
+  				</documentation>
+  			</annotation>
+  		</element>
+  	</sequence>
+  </complexType>
+  
+  <complexType name="BaseSearchOptions">
+  	<sequence>
+      <element name="sortOrder" type="result:SortOrder" minOccurs="0" default="Implied">
+        <annotation>
+          <documentation>
+            <example>Implied</example>
+             Strategy used to sort the results of the search.  Implied 
+             indicates that the sort order is chosen to best fit the search 
+             method employed and the type of content that is returned.
+          </documentation>
+        </annotation>
+      </element>         
+  	</sequence>
+  </complexType>
+
+  <complexType name="NarrowSearchOptions">
+  	<complexContent>
+  		<extension base="tns:BaseSearchOptions">
+  			<sequence>
+  				<element name="dateRestriction" type="tns:DateRestriction" minOccurs="0">
+  					<annotation>
+  						<documentation>Allows a user to enforce a range of allowable publication dates. These dates are inclusive, meaning that documents that were published on the startDate and endDate will be returned.</documentation>
+  					</annotation>
+  				</element>
+  			</sequence>
+  		</extension>
+  	</complexContent>
+  </complexType>
+
+  <complexType name="SearchOptions">
+  	<complexContent>
+  		<extension base="tns:NarrowSearchOptions">
+  			<sequence>
+  				<element name="searchMethod" type="tns:SearchMethod" minOccurs="0" default="Boolean">
+  					<annotation>
+  						<documentation>
+  							<example>MatchOnAnyWord</example>
+  							Type of search logic to be used on the query string.
+  						</documentation>
+  					</annotation>
+  				</element>
+  				<element name="ignoreCommonWords" type="boolean" minOccurs="0" default="true">
+  					<annotation>
+  						<documentation>Flag to instruct the search engine whether or not to ignore &quot;noise&quot; words in the search request.</documentation>
+  					</annotation>
+  				</element>
+  			</sequence>
+  		</extension>
+  	</complexContent>
+  </complexType>
+  
+  
+ <!-- Added for legal search by cts offshore starts --> 
+    
+  <complexType name="BaseLegalSearchOptions">
+  	<sequence>
+      <element name="legalSortOrder" type="result:LegalSortOrder" minOccurs="0" default="SourceOrder">
+        <annotation>
+          <documentation>
+            <example>Implied</example>
+             Strategy used to sort the results of the search.  Implied 
+             indicates that the sort order is chosen to best fit the search 
+             method employed and the type of content that is returned.
+          </documentation>
+        </annotation>
+      </element> 
+      
+     <element name="subSortOrder" type="result:SubSortOrder" minOccurs="0" >
+      </element> 
+  	</sequence>
+  </complexType>
+
+  <complexType name="NarrowLegalSearchOptions">
+  	<complexContent>
+  		<extension base="tns:BaseLegalSearchOptions">
+  			<sequence>
+  				<element name="dateRestriction" type="tns:DateRestriction" minOccurs="0">
+  					<annotation>
+  						<documentation>Allows a user to enforce a range of allowable publication dates. These dates are inclusive, meaning that documents that were published on the startDate and endDate will be returned.</documentation>
+  					</annotation>
+  				</element>
+  			</sequence>
+  		</extension>
+  	</complexContent>
+  </complexType>
+
+  <complexType name="LegalSearchOptions">
+  	<complexContent>
+  		<extension base="tns:NarrowLegalSearchOptions">
+  			<sequence>
+  				<element name="searchMethod" type="tns:SearchMethod" minOccurs="0" default="Boolean">
+  					<annotation>
+  						<documentation>
+  							<example>MatchOnAnyWord</example>
+  							Type of search logic to be used on the query string.
+  						</documentation>
+  					</annotation>
+  				</element>
+  				<element name="ignoreCommonWords" type="boolean" minOccurs="0" default="true">
+  					<annotation>
+  						<documentation>Flag to instruct the search engine whether or not to ignore &quot;noise&quot; words in the search request.</documentation>
+  					</annotation>
+  				</element>
+  			</sequence>
+  		</extension>
+  	</complexContent>
+  </complexType>
+ 
+<!-- Added for legal search by cts offshore starts -->
+
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

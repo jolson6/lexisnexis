@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://getdocumentversions.retrieve.services.v1.wsapi.lexisnexis.com" xmlns:tns="http://getdocumentversions.retrieve.services.v1.wsapi.lexisnexis.com"
+        xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com" xmlns:common="http://common.services.v1.wsapi.lexisnexis.com" xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" elementFormDefault="qualified"
+        attributeFormDefault="unqualified" version="1.0">
+
+	<import namespace="http://common.services.v1.wsapi.lexisnexis.com" schemaLocation="Common.xsd"/>
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" schemaLocation="Security.xsd"/>
+	<import namespace="http://result.common.services.v1.wsapi.lexisnexis.com" schemaLocation="Result.xsd"/>
+
+	<element name="GetDocumentVersions" type="tns:GetDocumentVersions">
+		<annotation>
+			<documentation>
+			<br></br>
+			This operation retrieves document version information for the document identified by its <strong><em>documentId</em></strong>. The document is accessed and determination is made if the 
+			document has other versions. If so,the Web Services Kit returns a document identifier (<strong><em>documentId</em></strong>)along with version metadata for each document version found. 
+			Metadata includes effective from-date, effective to-date, and a "current-ness" indicator (<strong><em>Past</em></strong>,<strong><em>Current</em></strong>, <strong><em>Future</em></strong>, <strong><em>NonCurrent</em></strong>).
+			</documentation>
+		</annotation>
+	</element>
+
+	<element name="GetDocumentVersionsResponse" type="tns:GetDocumentVersionsResponse">
+		<annotation>
+			<documentation>Consists of a list of document version information
+      for the specified document.</documentation>
+		</annotation>
+	</element>
+
+	<complexType name="GetDocumentVersions">
+		<sequence>
+			<element name="locale" type="common:Locale" minOccurs="0">
+				<annotation>
+					<documentation>Indicates language of request.</documentation>
+				</annotation>
+			</element>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>f4348ad8876542bc93748c89fb98a7e Security token that must
+          be provided on all non-authentication requests.</documentation>
+				</annotation>
+			</element>
+			<element name="documentId" type="string">
+				<annotation>
+					<documentation>An identifier associated with a single LexisNexis document.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="GetDocumentVersionsResponse">
+		<sequence>
+			<element name="documentVersionList" type="result:DocumentVersionList">
+				<annotation>
+					<documentation>List of document version information elements.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<!--
+  <complexType name="DocumentVersionList">
+    <sequence>
+      <element name="documentVersion" type="tns:DocumentVersion" minOccurs="0" maxOccurs="unbounded">
+        <annotation>
+          <documentation>Document version information.</documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+  <complexType name="DocumentVersion">
+    <sequence>
+      <element name="documentId" type="string">
+        <annotation>
+          <documentation>An identifier associated with a single LexisNexis document.
+          </documentation>
+        </annotation>
+      </element>
+      <element name="documentTitle" type="string">
+        <annotation>
+          <documentation>The title of the document version.</documentation>
+        </annotation>
+      </element>
+      <element name="documentVersionIndicator" type="tns:DocumentVersionIndicator">
+        <annotation>
+          <documentation>Indicates the "current-ness" of
+          the document version.</documentation>
+        </annotation>
+      </element>
+      <element name="effectiveFromDate" type="date" minOccurs="0">
+        <annotation>
+          <documentation>Effective starting date for this document
+          to be the "current" version.</documentation>
+        </annotation>
+      </element>
+      <element name="effectiveToDate" type="date" minOccurs="0">
+        <annotation>
+          <documentation>Effective ending date for this document
+          to be the "current" version.</documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+  <simpleType name="DocumentVersionIndicator">
+    <restriction base="string">
+      <enumeration value="Past" />
+      <enumeration value="Current" />
+      <enumeration value="Future" />
+      <enumeration value="NonCurrent">
+      	<annotation>
+      		<documentation>Indicates that the "current-ness" of the 
+      		document cannot be determined from the supplied version
+      		information.</documentation>
+      	</annotation>
+      </enumeration>
+    </restriction>
+  </simpleType>
+-->
+</schema>

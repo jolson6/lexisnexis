@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://getattachments.retrieve.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://getattachments.retrieve.services.v1.wsapi.lexisnexis.com" 
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+		xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" 
+        attributeFormDefault="unqualified" 
+        version="1.0">
+
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+        	schemaLocation="Security.xsd" />
+
+	<import namespace="http://common.search.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="SearchCommon.xsd" />
+
+	<import namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="Result.xsd" />
+
+	<!-- Message elements -->
+	<element name="GetAttachments" type="tns:GetAttachments">
+		<annotation>
+			<documentation>
+			While parsing retrieved documents, it may be discovered that one or more of them have an attachment associated with it.
+		    These <strong><em>attachmentIds</em></strong> can be extracted from the markup and used with this operation to retrieve and 
+		    display them to your user as needed.
+			</documentation>
+		</annotation>
+	</element>
+
+	<element name="GetAttachmentsResponse" type="tns:GetAttachmentsResponse">
+		<annotation>
+			<documentation>
+				Returns the attachment(s) requested by the client.
+			</documentation>
+		</annotation>
+	</element>
+
+	<!-- Types -->
+	<complexType name="GetAttachments">
+		<sequence>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>
+						Security token that must be provided on all authenticated requests.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="attachmentIdList" type="tns:AttachmentIdList">
+			<annotation>
+					<documentation>
+						Contains one or more attachmentIds which each identifies an individual attachment to a document.
+				   </documentation>
+			</annotation>
+		</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="GetAttachmentsResponse">
+		<sequence>
+			<element name="attachmentContainerList" type="tns:AttachmentContainerList" minOccurs="0" />
+		</sequence>
+	</complexType>
+
+	<complexType name="AttachmentIdList">
+		<sequence>
+			<element name="attachmentId" type="string" maxOccurs="unbounded">
+				<annotation>
+					<documentation>
+						Encapsulates metadata about a single attachment.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="AttachmentContainerList">
+		<sequence>
+			<element name="attachmentContainer" type="tns:AttachmentContainer" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>
+						Encapsulates metadata for individual attachments.
+						Encloses the attachmentId, mimeType, and attachment elements.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="AttachmentContainer">
+		<sequence>
+			<element name="attachmentId" type="string">
+				<annotation>
+					<documentation>
+						Id of the attachment returned..
+					</documentation>
+				</annotation>
+			</element>
+			<element name="mimeType" type="string">
+				<annotation>
+					<documentation>
+						MIME type of the attachment (e.g. image/gif, application/pdf, etc.)
+						If a MIME type cannot be determined, then "unknown" will be returned.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="attachment" type="base64Binary">
+				<annotation>
+					<documentation>
+						Attachment returned and base 64 encoded.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

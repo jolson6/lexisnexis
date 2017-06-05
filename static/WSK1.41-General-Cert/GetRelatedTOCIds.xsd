@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://getrelatedtocids.tableofcontents.services.v1.wsapi.lexisnexis.com"
+        xmlns:tns="http://getrelatedtocids.tableofcontents.services.v1.wsapi.lexisnexis.com"
+        xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+
+
+  <!-- Schema imports -->
+  <import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Common.xsd"/>
+
+  <import namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Security.xsd"/>
+
+
+  <!-- Element declarations -->
+  <element name="GetRelatedTOCIds" type="tns:GetRelatedTOCIds">
+    <annotation>
+      <documentation>
+	   This operation is used to determine if there are any related TOC-type structures (such as an index) associated with the source specified. If there are, the response 
+       message will contain information that can be used along with the <b><i>NavigateTOC</i></b> operation to access them. 
+</documentation>
+    </annotation>
+  </element>
+          
+  <element name="GetRelatedTOCIdsResponse" type="tns:GetRelatedTOCIdsResponse">
+    <annotation>
+      <documentation>Related table of contents identifier response
+      returned to the client application.</documentation>
+    </annotation>
+  </element>
+  
+
+  <!-- Complex type definitions -->
+  <complexType name="GetRelatedTOCIds">
+    <sequence>
+      <element name="locale" type="common:Locale" minOccurs="0">
+        <annotation>
+          <documentation>Indicates language of request.</documentation>
+        </annotation>
+      </element>
+      <element name="binarySecurityToken" type="security:BinarySecurityToken">
+        <annotation>
+          <documentation><example>f4348ad8876542bc93748c89fb98a7e</example> 
+          Security token that must be provided on all non-authentication requests.</documentation>
+        </annotation>
+      </element>
+      <element name="sourceId" type="integer">
+        <annotation>
+          <documentation>Identifier of the source for which the related table 
+          of contents identifiers are being requested.</documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+  <complexType name="GetRelatedTOCIdsResponse">
+    <sequence>
+      <element name="RelatedTOCIdInfoList" type="tns:RelatedTOCIdInfoList">
+        <annotation>
+          <documentation>List of related table of contents identifier 
+          information.</documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+  <complexType name="RelatedTOCIdInfoList">
+    <sequence>
+      <element name="RelatedTOCIdInfo" type="tns:RelatedTOCIdInfo" minOccurs="0" maxOccurs="unbounded">
+        <annotation>
+          <documentation>Encloses an identifier of the TOC taxonomy being requested. This can either be a 
+		   sourceId for requesting the "main" TOC, or the tocId for requesting a related TOC, index, or other
+		   TOC-implemented related taxonomy.
+		  </documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+  <complexType name="RelatedTOCIdInfo">
+    <sequence>
+      <element name="tocId" type="string">
+        <annotation>
+          <documentation>Contains the table of contents identifier that can be used as input for subsequent TOC operations.</documentation>
+        </annotation>
+      </element>
+      <element name="displayLabel" type="string">
+        <annotation>
+          <documentation>Display text indicating the nature of the related TOC.
+          <examples>"Index", "Bulletin", "Index and Tables"</examples></documentation>
+        </annotation>
+      </element>
+      <element name="relatedTocType" type="tns:RelatedTOCType">
+        <annotation>
+          <documentation>Indicates the type of this related TOC.</documentation>
+        </annotation>
+      </element>
+      <element name="preferredToc" type="boolean">
+        <annotation>
+          <documentation>Indicates whether or not this related TOC is the 
+          preferred ("main") table of contents.</documentation>
+        </annotation>
+      </element>
+      <element name="displayableWithDocument" type="boolean">
+        <annotation>
+          <documentation>Indicates whether or not this related TOC should have
+          the capability of being displayed when viewing a source document.</documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+  <!-- Simple type definitions -->
+  <simpleType name="RelatedTOCType">
+    <restriction base="string">
+      <enumeration value="TableOfContents"/>
+      <enumeration value="Index"/>
+      <enumeration value="Other"/>
+    </restriction>
+  </simpleType>
+
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2005 by LexisNexis
+  All Rights Reserved
+-->

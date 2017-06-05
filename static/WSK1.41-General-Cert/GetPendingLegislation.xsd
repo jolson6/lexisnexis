@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://getpendinglegislation.ldc.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://getpendinglegislation.ldc.services.v1.wsapi.lexisnexis.com"    
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"
+        version="1.0">
+     
+
+ 
+  <import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" schemaLocation="Security.xsd"/>
+
+  <!-- Message elements -->
+  <element name="GetPendingLegislation" type="tns:GetPendingLegislation">
+    <annotation>
+      <documentation>
+       	Represents a LexisNexis GetPendingLegislation search and retrieval for a given citation. 
+      </documentation>
+    </annotation>
+  </element>
+
+  <element name="GetPendingLegislationResponse" type="tns:GetPendingLegislationResponse">
+    <annotation>
+      <documentation>
+      	The response from a GetPendingLegislation search request is a set of search results,   
+        containing document identifiers along with documents in the
+        specified or default output format and citation information.
+      </documentation>
+    </annotation>
+  </element>
+	
+  <!-- Types -->
+  <complexType name="GetPendingLegislation">
+    <sequence>
+      <element name="binarySecurityToken" type="security:BinarySecurityToken">
+        <annotation>
+          <documentation>
+            <example>f4348ad8876542bc93748c89fb98a7e</example>
+            Security token that must be provided on all non-authentication
+            requests.
+          </documentation>
+        </annotation>
+      </element>
+      <element name="citation" type="string" minOccurs="1">
+		<annotation>
+			<documentation>
+				<example>800 f2d 111</example>
+				A Citation String 
+			</documentation>
+		</annotation>
+	  </element>
+	  <element name="countryCode" type="string" minOccurs="0" default="USA">
+		<annotation>
+			<documentation>
+				<example>USA</example>
+				Country Code 
+			</documentation>
+		</annotation>
+	  </element>	  
+	 </sequence>
+  </complexType>
+  
+  <complexType name="GetPendingLegislationResponse">
+  	<sequence>
+	  	<element name="pendingLegislationLinks" type="integer">
+				<annotation>
+					<documentation>Number of pending legislation links contained in the document.</documentation>
+				</annotation>
+			</element>
+  		<element name="document" type="base64Binary">
+				<annotation>
+					<documentation>The LexisNexis document.</documentation>
+				</annotation>
+		</element>
+  	</sequence>
+  </complexType>
+  
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2011 by LexisNexis
+  All Rights Reserved
+-->

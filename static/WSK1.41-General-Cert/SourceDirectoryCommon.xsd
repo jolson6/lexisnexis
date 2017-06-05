@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://common.sourcedirectory.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://common.sourcedirectory.services.v1.wsapi.lexisnexis.com" 
+        xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" 
+        attributeFormDefault="unqualified" 
+        version="1.0">
+
+  <import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Common.xsd"/>
+
+   <complexType name="Source">
+      <sequence>
+         <element name="name" type="string">
+            <annotation>
+               <documentation>
+                  <example>News Group File, Most Recent 90 Days</example>
+                  Either the actual name of the publication or the name 
+                  given to a group of publications.                  
+               </documentation>
+            </annotation>
+         </element>
+         <element ref="common:sourceId">
+            <annotation>
+               <documentation>
+                  <example>7944</example>
+                  An identifier used to represent a specific source in
+                  the source directory.
+               </documentation>
+            </annotation>
+         </element>
+		 <element name="description" type="string">
+            <annotation>
+               <documentation>
+                  <example>News</example>
+                  A short description of the source.
+               </documentation>
+            </annotation>
+         </element>
+		 <element name="type" type="tns:SourceType">
+		 	<annotation>
+				<documentation>
+					<example>SecuredSource</example>
+					Type of sources returned.
+				</documentation>
+			</annotation>
+		 </element>
+		 <element name="premiumSource" type="boolean">
+            <annotation>
+               <documentation>
+                  <example>true</example>
+                  This flag warns users that the source that was requested
+				  is not found in their normal subscription, but may be 
+				  used to run a search on a pay-per-transaction basis.
+               </documentation>
+            </annotation>
+         </element> 
+		 <element name="combinabilityIdList" type="tns:CombinabilityIdList">
+		 	<annotation>
+				<documentation>
+					 The list of combinability ids for the source.
+				</documentation>
+			</annotation>
+		</element>
+		<element name="dppIndicator" type="integer" minOccurs="0">
+				<annotation>
+					<documentation>DPP Indicator.</documentation>
+				</annotation>
+		</element>
+      </sequence>
+   </complexType>
+   
+   <complexType name="SourceList">
+      <sequence>
+         <element name="source" type="tns:Source" minOccurs="0" maxOccurs="unbounded">
+            <annotation>
+               <documentation>
+                  Detailed information about a single source.
+               </documentation>
+            </annotation>
+         </element>
+      </sequence>
+   </complexType>
+
+   <complexType name="CombinabilityIdList">
+      <sequence>
+         <element name="combinabilityId" type="integer" minOccurs="0" maxOccurs="unbounded">
+            <annotation>
+               <documentation>
+                  The combinability identifier for a single source.  Only sources
+				  with common combinabilityId(s) can be combined together for searching.
+               </documentation>
+            </annotation>
+         </element>
+      </sequence>
+   </complexType>
+   
+   <simpleType name="SourceType">
+      <restriction base="string">
+	  	 <enumeration value="Standard"/>
+         <enumeration value="SecuredSource"/>
+         <enumeration value="TableOfContents"/>
+      </restriction>
+   </simpleType>  
+   
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

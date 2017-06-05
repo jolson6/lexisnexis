@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://changededuplicationmethod.retrieve.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://changededuplicationmethod.retrieve.services.v1.wsapi.lexisnexis.com" 
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+		xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com"
+		xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" 
+        attributeFormDefault="unqualified" 
+        version="1.0">
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+        	schemaLocation="Security.xsd" />
+
+	<import namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="Result.xsd" />
+			
+	<import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Common.xsd"/>			
+
+	<!-- Message elements -->
+	<element name="ChangeDeDuplicationMethod" type="tns:ChangeDeDuplicationMethod">
+		<annotation>
+			<documentation>
+				Allows a client to change the deduplication parameters.
+			</documentation>
+		</annotation>
+	</element>
+
+	<element name="ChangeDeDuplicationMethodResponse" type="result:SearchResponse">
+		<annotation>
+			<documentation>
+				Returns the new searchId and documents requested by the client.
+			</documentation>
+		</annotation>
+	</element>
+
+	<!-- Types -->
+	<complexType name="ChangeDeDuplicationMethod">
+		<sequence>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>
+						Security token that must be provided on all authenticated requests.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="searchId" type="string">
+				<annotation>
+					<documentation>
+						Identifier that refers to all pertinent information related to the original search.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="dedupeParams" type="common:DedupeParams" minOccurs="0">
+		        <annotation>
+		          <documentation>
+		            Options pertaining to the De-duplication (Similarity Threshold and Lead Document Type).
+		          </documentation>
+		        </annotation>			
+			</element>			
+			<element name="retrievalOptions" type="result:RetrievalOptions">
+				<annotation>
+					<documentation>
+						This structure contains details about how retrieved
+						documents are to be presented.  Also includes the range of documents
+						to return.  If absent, no documents will be returned.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="crosslinkFlag" type="string" minOccurs="0" maxOccurs="1">
+			<annotation>
+			<documentation>
+				Created a new element for XML Crosslink functionality. 
+				To enable the cross linking functionality, the value to be passed is "Y" or "y"
+			</documentation>
+			</annotation>
+			</element>
+		</sequence>
+	</complexType></schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2007 by LexisNexis
+  All Rights Reserved
+-->

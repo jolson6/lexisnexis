@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://modifysavedsearch.savedsearch.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://modifysavedsearch.savedsearch.services.v1.wsapi.lexisnexis.com" 
+        xmlns:common="http://common.savedsearch.services.v1.wsapi.lexisnexis.com" 
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+		xmlns:search="http://result.common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" 
+        attributeFormDefault="unqualified" 
+        version="1.0">
+
+   <import namespace="http://common.savedsearch.services.v1.wsapi.lexisnexis.com"
+           schemaLocation="SavedSearchCommon.xsd" />           
+
+   <import namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+           schemaLocation="Security.xsd" />  
+		   
+   <import namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+           schemaLocation="Result.xsd" />    
+
+   <!-- Define request/response elements -->
+   <element name="ModifySavedSearch" type="tns:ModifySavedSearch">
+      <annotation>
+         <documentation>
+            The modifiable fields include the saved search name and the description since they are the only parameters accepted when a search is saved.
+				</documentation>
+      </annotation>
+   </element>
+   <element name="ModifySavedSearchResponse" type="tns:ModifySavedSearchResponse">
+      <annotation>
+         <documentation>
+            The response message will be empty and simply used to verify that the request was received.
+	
+         </documentation>
+      </annotation>
+   </element>
+        
+   <!-- Define request/response types -->
+   <complexType name="ModifySavedSearch">
+      <sequence>
+         <element name="binarySecurityToken" type="security:BinarySecurityToken">
+            <annotation>
+               <documentation>
+                  Security token that must be provided on all authenticated 
+                  requests.
+               </documentation>
+            </annotation>
+         </element>
+         <element name="savedSearchId" type="integer">
+            <annotation>
+               <documentation>
+                  The savedSearchId that can be used in future requests to reference
+				  this saved search.
+               </documentation>
+            </annotation>
+         </element>
+         <element name="name" type="common:SavedSearchName">
+            <annotation>
+               <documentation>
+                  A name to be associated with the saved search.
+               </documentation>
+            </annotation>
+         </element>
+         <element name="description" type="string" minOccurs="0">
+            <annotation>
+               <documentation>
+                  A description to be associated with the saved search.
+               </documentation>
+            </annotation>
+         </element>
+         <element name="searchId" type="string">
+            <annotation>
+               <documentation>
+                  The searchId associated with a previously executed WSAPI search.
+				  The search criteria associated with this searchId will be saved.
+               </documentation>
+            </annotation>
+         </element>
+      </sequence>
+   </complexType>
+  
+   <complexType name="ModifySavedSearchResponse">
+   </complexType>
+
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+		targetNamespace="http://getindextermtaxonomies.index.services.v1.wsapi.lexisnexis.com" 
+		xmlns:tns="http://getindextermtaxonomies.index.services.v1.wsapi.lexisnexis.com"
+        xmlns:common="http://common.services.v1.wsapi.lexisnexis.com" 
+		xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+		elementFormDefault="qualified" 
+		attributeFormDefault="unqualified" 
+		version="1.0">
+
+	<import namespace="http://common.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="Common.xsd"/>
+
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="Security.xsd"/>
+
+	<!-- Define request/response elements -->
+	<element name="GetIndexTermTaxonomies" type="tns:GetIndexTermTaxonomies">
+		<annotation>
+			<documentation>
+		  <br></br>
+		  This operation is used to retrieve a list of index term taxonomies available to the user based on the locale of the server issuing the request. The request message only
+		   needs the <i><b>binarySecurityToken</b></i> to identify the user making the request.
+		  <br></br><br></br>
+		  Each taxonomy returned will have a name, a unique identifier (<strong><em>taxonomyId</em></strong>), and a flag indicating if it can be browsed.  
+		  <blockquote>
+		  <strong>Note:</strong>The <strong><em>taxonomyId</em></strong> returned is required to browse an index term taxonomy through the <strong><em>BrowseIndexTerms</em></strong> operation, and may be used in a search 
+		  of indexing terms through the <strong><em>SearchIndexTerms</em></strong> operation to focus the indexing term query on a specific taxonomy. </blockquote> 
+		</documentation>
+		</annotation>
+	</element>
+	<element name="GetIndexTermTaxonomiesResponse" type="tns:GetIndexTermTaxonomiesResponse">
+		<annotation>
+			<documentation>Returns a list of taxonomies.
+			</documentation>
+		</annotation>
+	</element>
+
+	<!-- Define request/response types -->
+	<complexType name="GetIndexTermTaxonomies">
+		<complexContent>
+			<extension base="common:BaseRequest">
+				<sequence>
+					<element name="binarySecurityToken" type="security:BinarySecurityToken">
+						<annotation>
+							<documentation>
+								Security token that must be provided on all non-authentication
+                  requests.  Example: f4348ad8876542bc93748c89fb98a7e</documentation>
+						</annotation>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="GetIndexTermTaxonomiesResponse">
+		<sequence>
+			<element name="taxonomyList" type="tns:TaxonomyList">
+				<annotation>
+					<documentation>Encloses zero or more taxonomy elements.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="TaxonomyList">
+		<sequence>
+			<element name="taxonomy" type="tns:Taxonomy" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Encloses elements that provide information about a node located directly under the requested node.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="Taxonomy">
+		<sequence>
+			<element name="taxonomyId" type="string">
+				<annotation>
+					<documentation>A unique identifier for this taxonomy.Example: af987...90bc</documentation>
+				</annotation>
+			</element>
+			<element name="name" type="string">
+				<annotation>
+					<documentation>The taxonomy's name.  Example: Geographic</documentation>
+				</annotation>
+			</element>
+			<element name="browsable" type="boolean">
+				<annotation>
+					<documentation>A flag that indicates whether or not the taxonomy can be browsed with
+					the BrowseIndexTerms operation.  Some terms that are not broken down into browsable 
+					classifications, but are still obtainable through the SearchIndexTerms operation.  
+					Example: true</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+</schema>
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

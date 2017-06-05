@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://common.services.v1.wsapi.lexisnexis.com"
+        xmlns:tns="http://common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+        
+<!-- Deduplication (10/06/2010)
+Author:PeriasVx : Added the definition for new complexType DedupeParams -->        
+<!-- Multiple ClassificationIds (15/02/2011)
+Author:Vaithiax : Added the new optional element classificationIdList -->  
+
+  <simpleType name="ProjectId">
+    <restriction base="string">
+      <maxLength value="32"/>
+    </restriction>
+  </simpleType>
+
+  <complexType name="SourceIdList">
+    <sequence>
+      <element ref="tns:sourceId" maxOccurs="unbounded">
+        <annotation>
+          <documentation>Unique identifier for a standard LexisNexis source.</documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
+<!-- Multiple Classification ID Change starts -->
+	<complexType name="ClassificationIdList">
+		<sequence>
+			<element ref="tns:classificationId" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					 <documentation>Identifier for the "related" source for which the classification Id is being  requested.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<element name="classificationId" type="string">
+		<annotation>
+          <documentation>Identifier for the "related" source for which the classification Id is being
+          requested.</documentation>
+        </annotation>
+	</element>
+<!-- Multiple Classification ID Change ends -->	
+  <element name="sourceId" type="integer">
+    <annotation>
+      <documentation>Unique identifier for a standard LexisNexis source.</documentation>
+    </annotation>
+  </element>
+
+	<simpleType name="Locale">
+		<restriction base="language">
+			<enumeration value="en-US" />
+			<enumeration value="en-GB" />
+			<enumeration value="fr" />
+			<enumeration value="de" />
+			<enumeration value="en-AU" />
+			<enumeration value="en-NZ" />
+			<enumeration value="en-CA" />
+			<enumeration value="fr-CA" />
+			<!-- Including de_AT locale support for the webstar #4602038 -->
+			<enumeration value="de-AT" />
+		</restriction>
+	</simpleType>
+
+	<complexType name="BaseRequest">
+		<sequence>
+			<element name="locale" type="tns:Locale" minOccurs="0" default="en-US">
+				<annotation>
+					<documentation>
+					  Optional locale indicating language of request.  Used when it is 
+                      necessary to distinguish language of certain elements in the request
+                      parameters (search terms, source selection, etc.)
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	
+	<!-- Deduplication changes - starts -->
+	<simpleType name="LeadDocumentType">
+		<restriction base="string">
+	  		<enumeration value="INSERT_ORDER" />
+	  		<enumeration value="NEWEST" />
+	  		<enumeration value="OLDEST" />
+	  		<enumeration value="HIGHEST_OVERLAP" />
+		</restriction>
+	</simpleType>
+	
+	<complexType name="DedupeParams">
+		<sequence>
+			<element name="similarity" type="string" minOccurs="0" default="OFF">
+				<annotation>
+					<documentation>
+						Optional Similarity parameter for De-duplication similarity clustering. 
+						Used to specify the threshold value for applying De-duplication. 
+						By default 0 will be used if user doesn't specify any similarity threshold value.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="leadDocumentType" type="tns:LeadDocumentType" minOccurs="0" default="NEWEST">
+				<annotation>
+					<documentation>
+						Optional Lead Document Type. The lead document can be set as one of the following four options:
+						1.	The first document put online (OLDEST)
+						2.	The last document put online (NEWEST) - Default
+						3.	Has the most content in common with the entire group (HIGHEST_OVERLAP)
+						4.	Appears first based on how the result set it sorted (INSERT_ORDER)
+					</documentation>
+				</annotation>			
+			</element>
+		</sequence>		
+	</complexType>
+	<!-- Deduplication changes - ends -->	
+</schema>
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+		targetNamespace="http://getcitationreport.citator.services.v1.wsapi.lexisnexis.com"
+		xmlns:tns="http://getcitationreport.citator.services.v1.wsapi.lexisnexis.com"
+		xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+		xmlns:citator="http://citator.common.services.v1.wsapi.lexisnexis.com"
+		xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+		xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<!-- Declare imports -->
+	<import namespace="http://common.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="Common.xsd"/>
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="Security.xsd"/>
+	<import namespace="http://citator.common.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="CitatorCommon.xsd"/>
+	<import namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="Result.xsd"/>
+
+
+	<!-- Define request/response elements -->
+	<element name="GetCitationReport" type="tns:GetCitationReport">
+		<annotation><documentation>
+		This operation takes a citation and country code and returns a corresponding citation report (case or statute).
+		
+     	</documentation></annotation>
+	</element>
+
+	<element name="GetCitationReportResponse" type="tns:GetCitationReportResponse">
+		<annotation><documentation>
+		The response message contains the one or more documents specified in the requested format and markup.
+		</documentation></annotation>
+	</element>
+
+	<!-- Define the request/response types -->
+	<complexType name="GetCitationReport">
+		<sequence>
+			<element name="locale" type="common:Locale" minOccurs="0">
+				<annotation><documentation>
+				An option locale indicating the language of the request.
+				</documentation></annotation>
+			</element>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation><documentation>
+				Security token that must be provided on all non-authentication
+          		requests.  Example: f4348ad8876542bc93748c89fb98a7e
+				</documentation></annotation>
+			</element>
+			<element name="citation" type="citator:Citation">
+				<annotation><documentation>The legal citation</documentation></annotation>
+			</element>
+			<element name="documentFormatOptions" type="result:CitationDocumentFormatOptions"
+					 minOccurs="0">
+				<annotation><documentation>
+				The document format options for the Citation Reports.  Selecting &quot;Dynamic&quot; will
+				return a document in full text format when there is only a single document in the answerset,
+				and will return documents in a cite format when the answerset contains multiple documents.
+				</documentation></annotation>
+			</element>
+			<element name="includeShepardsSignals" type="boolean" minOccurs="0">
+				<annotation>
+					<documentation>Allows the retrieval of Shepard's Signals.</documentation>
+				</annotation>
+			</element>
+			<element name="projectId" type="common:ProjectId" minOccurs="0">
+				<annotation>
+		  			<documentation>
+						<example>Research Project 001</example>
+						Used for client or project identification purposes.  This 
+	       				identifier will be associated with each search transaction 
+	      				and will be reported on your organization&apos;s invoice.
+		 			</documentation>
+				</annotation>
+	  		</element>			
+		</sequence>
+	</complexType>
+
+	<complexType name="GetCitationReportResponse">
+		<sequence>
+			<element name="searchId" type="string">
+		        <annotation><documentation>
+	              <example>ef5bafbd11</example>
+	              Unique identifier that maintains all pertinent information
+	              from the original search.
+		        </documentation></annotation>
+			</element>
+			<element name="documentsFound" type="result:DocumentsFound">
+				<annotation><documentation>
+				Number of documents returned by the search.
+				</documentation></annotation>
+			</element>
+			<element name="fallback" type="boolean">
+		        <annotation><documentation>
+		        Flag indicating the absence or presence of a "fallback" condition; i.e. the
+		        legal citation specified in the request references somewhere other than the 
+		        beginning of the well-known reference for the legal document.
+		        </documentation></annotation>
+		     </element>
+			 <element name="documentContainerList" type="result:DocumentContainerList">
+			 	<annotation><documentation>List of document containers holding the documents
+				referenced in the citations.
+				</documentation></annotation>
+			 </element>
+		</sequence>
+	</complexType>
+</schema>
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2008 by LexisNexis
+  All Rights Reserved
+-->

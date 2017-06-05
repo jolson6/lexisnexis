@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://searchcitationformats.ldc.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://searchcitationformats.ldc.services.v1.wsapi.lexisnexis.com" 
+        xmlns:ldccommon="http://ldccommon.common.services.v1.wsapi.lexisnexis.com"
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"
+        version="1.0">
+
+  <import namespace="http://ldccommon.common.services.v1.wsapi.lexisnexis.com" schemaLocation="LDCCommon.xsd"/>
+  <import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" schemaLocation="Security.xsd"/>
+
+  <!-- Message elements -->
+  <element name="SearchCitationFormats" type="tns:SearchCitationFormats">
+    <annotation>
+      <documentation>
+        Represents a search for getting the information regarding the citation formats by using the search string(reporter).
+      </documentation>
+    </annotation>
+  </element>
+
+  <element name="SearchCitationFormatsResponse" type="tns:SearchCitationFormatsResponse">
+    <annotation>
+      <documentation>
+        The response from a SearchCitationFormats is a set of search results,   
+        containing information regarding the source key, source Name and the reporter format
+        specified.
+      </documentation>
+    </annotation>
+  </element>
+	
+	<complexType name="SearchCitationFormatsResponse">
+		<sequence>
+			<element name = "cfaSourceList" type="ldccommon:CfaSourceDetailsList" minOccurs="0">
+				<annotation>
+					<documentation>
+					Represents the information regarding the source key, source name and reporter format
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+  <!-- Types -->
+  <complexType name="SearchCitationFormats">
+    <sequence>
+      <element name="binarySecurityToken" type="security:BinarySecurityToken">
+        <annotation>
+          <documentation>
+            <example>f4348ad8876542bc93748c89fb98a7e</example>
+            Security token that must be provided on all non-authentication
+            requests.
+          </documentation>
+        </annotation>
+      </element>
+	  <element name="searchString" type="string" minOccurs="1">
+		<annotation>
+			<documentation>
+				<example>Utah Code</example>
+				 Text to be searched
+			</documentation>
+		</annotation>
+	  </element>
+     </sequence>
+  </complexType>
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2010 by LexisNexis
+  All Rights Reserved
+-->

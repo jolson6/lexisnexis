@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://legalsearch.search.services.v1.wsapi.lexisnexis.com"
+        xmlns:tns="http://legalsearch.search.services.v1.wsapi.lexisnexis.com"
+        xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+        xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com"
+        xmlns:searchcommon="http://common.search.services.v1.wsapi.lexisnexis.com"
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"
+        version="1.0">
+
+  <import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Common.xsd"/>
+  <import namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Result.xsd"/>
+  <import namespace="http://common.search.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="SearchCommon.xsd"/>
+  <import namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Security.xsd"/>
+
+  <!-- Message elements -->
+  <element name="LegalSearch" type="tns:LegalSearch">
+    <annotation>
+      <documentation>
+        Represents a LexisNexis search and retrieval.  Many options are 
+        exposed to allow a user to customize the search request.
+      </documentation>
+    </annotation>
+  </element>
+
+  <element name="LegalSearchResponse" type="result:LegalSearchResponse">
+    <annotation>
+      <documentation>
+        The response from a search request is a set of search results,   
+        containing document identifiers along with documents in the
+        specified or default output format.
+      </documentation>
+    </annotation>
+  </element>
+
+  <!-- Types -->
+  <complexType name="LegalSearch">
+  	<complexContent>
+	  <extension base="common:BaseRequest">
+	    <sequence>
+	      <element name="binarySecurityToken" type="security:BinarySecurityToken">
+	        <annotation>
+	          <documentation>
+	            <example>f4348ad8876542bc93748c89fb98a7e</example>
+	            Security token that must be provided on all non-authentication
+	            requests.
+	          </documentation>
+	        </annotation>
+	      </element>
+	      <element name="sourceInformation" type="searchcommon:SourceInformationChoice">
+	        <annotation>
+	          <documentation>
+	               Either a list of source identifiers or a single secured 
+	              source identifier.
+	          </documentation>
+	        </annotation>
+	      </element>
+	      <element name="query" type="string">
+	        <annotation>
+	          <documentation>
+	            <example>cats and dogs and hamsters</example>
+	              Query string for the search request, formatted in the 
+	              appropriate syntax for the selected search method.
+	          </documentation>
+	        </annotation>
+	      </element>
+	      <element name="projectId" type="common:ProjectId" minOccurs="0">
+	        <annotation>
+	          <documentation>
+	            <example>Research Project 001</example>
+	            Used for client or project identification purposes.  This 
+	            identifier will be associated with each search transaction 
+	            and will be reported on your organization&apos;s invoice.
+	             </documentation>
+	        </annotation>
+	      </element>
+	      <element name="SearchOptions" type="searchcommon:LegalSearchOptions" minOccurs="0">
+	        <annotation>
+	          <documentation>
+	            Options pertaining to fine-tuning the search.
+	          </documentation>
+	        </annotation>
+	      </element>
+	      <element name="retrievalOptions" type="result:RetrievalOptions" minOccurs="0">
+	        <annotation>
+	          <documentation>
+	            Options pertaining to the view, markup, and range of documents retrieved from 
+	            the result set returned from the search.
+	          </documentation>
+	        </annotation>
+	      </element>
+	      <element name="useCSP" type="boolean" minOccurs="0">
+	        <annotation>
+	          <documentation>
+              Use Combined Search Pricing Rules/Logic.
+	          </documentation>
+	        </annotation>
+	      </element>
+	      <element name="continueId" type="string" minOccurs="0">
+	        <annotation>
+	          <documentation>
+              This is an identifier to continue to a previously attempted
+              search that was too general for normal processing.
+	          </documentation>
+	        </annotation>
+	      </element>
+	    </sequence>
+	  </extension>
+  	</complexContent>
+  </complexType>
+
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

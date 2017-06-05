@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://authenticate.authentication.services.v1.wsapi.lexisnexis.com"
+            xmlns:tns="http://authenticate.authentication.services.v1.wsapi.lexisnexis.com"
+		    xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified"
+            version="1.0">
+    
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="Security.xsd"/>
+
+    <!-- Declare the Authenticate request and response elements -->
+    <element name="Authenticate" type="tns:Authenticate">
+        <annotation><documentation>
+    <p>The input message contains the user's LexisNexis ID (also known as the <i><b>authId</b></i>) and <b><i>password</i></b> which are used to verify his/her
+        registration with LexisNexis and to look up that user's entitlements (authorized access to specific services, content, and features).</p>
+            </documentation></annotation>
+    </element>
+
+    <element name="AuthenticateResponse" type="tns:AuthenticateResponse">
+        <annotation><documentation>
+        <p>The output message contains a <i><b>binarySecurityToken</b></i> that must be included in all subsequent request messages. Since the authentication 
+		 token is only valid for a 24-hour period of time, its expiration date and time are also provided.  This allows a new token to be requested just prior to the current token expiring.</p>
+        </documentation></annotation>
+    </element>
+
+    <!-- Declare the Authenticate complex type -->
+    <complexType name="Authenticate">
+        <sequence>
+            <element name="authId" type="string">
+                <annotation><documentation>
+                The LexisNexis ID to be validated.
+                </documentation></annotation>
+            </element>
+            <element name="password" type="string">
+                <annotation><documentation>
+               The password associated with this ID.
+                </documentation></annotation>
+            </element>
+		    <element name="namespace" type="string" minOccurs="0">
+               <annotation>
+                  <documentation>
+                  The namespace associated with this LexisNexis ID. 
+				  A namespace is not required for most markets and applications.
+				  If it is needed, it was provided when this subscription was set up.
+                  </documentation>
+               </annotation>
+         </element>
+        </sequence>
+    </complexType>
+
+    <!-- Declare the AuthenticateResponse complext type -->
+    <complexType name="AuthenticateResponse">
+        <sequence>
+            <element name="binarySecurityToken" type="security:BinarySecurityToken">
+                <annotation><documentation>
+                Security token to be used on all subsequent requests.  This token
+		        has a finite lifespan as indicated by the expiration time.
+                </documentation></annotation>
+            </element>
+            <element name="expiration" type="dateTime">
+                <annotation><documentation>
+                Expiration date and time for this security token.The format is: 
+                CCYY-MM-DDThh:mm:ss-hh:mm
+               (GMT with a time zone offset - CCYY = year, MM= month [1-12], DD = day [01-31],
+			    T= required separator, hh= hour [0-23], mm= minute [0-59], 
+			    and ss= second [0-59] -The time offset may be expressed as a + or - value.)
+				</documentation></annotation>
+            </element>
+            <element name="userInformation" type="security:UserInformation">
+                <annotation><documentation>
+				Encloses the locale element. 
+                Default language that will be used on subsequent requests.
+                </documentation></annotation>
+            </element>
+        </sequence>
+    </complexType>
+
+
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

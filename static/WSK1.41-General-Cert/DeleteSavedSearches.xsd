@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://deletesavedsearches.savedsearch.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://deletesavedsearches.savedsearch.services.v1.wsapi.lexisnexis.com" 
+        xmlns:common="http://common.savedsearch.services.v1.wsapi.lexisnexis.com" 
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+        elementFormDefault="qualified" 
+        attributeFormDefault="unqualified" 
+        version="1.0">
+
+	<import namespace="http://common.savedsearch.services.v1.wsapi.lexisnexis.com"
+            schemaLocation="SavedSearchCommon.xsd" />           
+
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+            schemaLocation="Security.xsd" />  
+
+	<element name="DeleteSavedSearches" type="tns:DeleteSavedSearches">
+		<annotation>
+			<documentation>
+				This operation is used to delete one or more saved searches identified by their<strong><em>savedSearchIds</em></strong>.This information was provided when the search was originally saved 
+				and is also supplied in the<strong><em>ListSavedSearchesResponse</em></strong>message.
+			    </documentation>
+		</annotation>
+	</element>
+	<element name="DeleteSavedSearchesResponse" type="tns:DeleteSavedSearchesResponse">
+		<annotation>
+			<documentation>
+				<p>The response message is normally empty to acknowledge that the request was received and performed. However if the saved search could not be deleted, that information is reported.</p>
+				
+			</documentation>
+		</annotation>
+	</element>
+
+	<complexType name="DeleteSavedSearches">
+		<sequence>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>
+						Security token that must be provided on all authenticated 
+						requests.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="savedSearchIdList" type="tns:SavedSearchIdList">
+				<annotation>
+					<documentation>
+						List container that holds the savedSearchIds to be deleted.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="DeleteSavedSearchesResponse">
+		<sequence>
+			<element name="failureList" type="tns:FailureList" minOccurs="0">
+				<annotation>
+					<documentation>
+						List container that holds a list of saved searches whose delete failed.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="SavedSearchIdList">
+		<sequence>
+			<element name="savedSearchId" type="integer" maxOccurs="unbounded">
+				<annotation>
+					<documentation>
+						A saved search ID to be deleted.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="FailureList">
+		<sequence>
+			<element name="failure" type="tns:Failure" maxOccurs="unbounded">
+				<annotation>
+					<documentation>
+						Encloses the savedSearchId and reason elements
+					    which identify a saved search and the reason why it could not be deleted.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="Failure">
+		<sequence>
+			<element name="savedSearchId" type="integer">
+				<annotation>
+					<documentation>
+						Saved Search ID for which the delete failed.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="reason" type="tns:Reason">
+				<annotation>
+					<documentation>
+						Reason that the delete failed.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<simpleType name="Reason">
+		<restriction base="string">
+			<enumeration value="InvalidSavedSearchID" />
+			<enumeration value="Unknown" />
+		</restriction>
+	</simpleType>
+
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

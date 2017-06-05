@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://getdocumentsbyrange.retrieve.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://getdocumentsbyrange.retrieve.services.v1.wsapi.lexisnexis.com" 
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+		xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com"
+		xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" 
+        attributeFormDefault="unqualified" 
+        version="1.0">
+<!-- 
+[XML CROSS LINKING]
+Author: BandarNB: Added a new element "crosslinkFlag" for XML CROSS LINKING Functionality
+Date 03-08-10.
+ -->
+ 
+ <!-- Deduplication (10/06/2010)
+Author:PeriasVx : Added the new optional element expandedLead -->  
+<!-- Multiple ClassificationIds (15/02/2011)
+Author:Vaithiax : Added the new optional element classificationIdList --> 
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+        	schemaLocation="Security.xsd" />
+
+	<import namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="Result.xsd" />
+
+	<import namespace="http://common.search.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="SearchCommon.xsd" />
+	<import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="Common.xsd" />	
+
+	<!-- Message elements -->
+	<element name="GetDocumentsByRange" type="tns:GetDocumentsByRange">
+		<annotation>
+			<documentation>
+			<br></br>
+			When the search was submitted, only the first 20 documents in the results set may have been requested so that users could easily review them. 
+			Assuming that more that 20 documents were found and they wanted to review the next "chunk" of search results, this operation would be used to retrieve them.
+			<br></br>
+			<br></br>
+			<p>In the request, the <i><b>searchId</b></i> information must be provided to identify the specific set of search results in question. 
+		    And the portion of the list (first and last document numbers) to retrieve must also be specified. Those documents may be requested to be delivered in a different display format and using a different markup.</p>
+		
+		    <blockquote><b>Note:</b>Since the documents in the initial search results set cannot be specifically identified, they need to be referred to by their position in the results set. 
+			The first document in the set is document 1, the second is document 2, and so on. </blockquote>
+		    
+			</documentation>
+		</annotation>
+	</element>
+
+	<element name="GetDocumentsByRangeResponse" type="result:RetrievalResponse">
+		<annotation>
+			<documentation>
+				<p>
+			The response message contains the requested collection of documents in the specified format and markup. The response also includes the <b><i>documentId</i></b>for each 
+			document delivered. This information can be stored and used with the <b><i>GetDocumentsByDocumentId</i></b>operation as needed to retrieve specific documents individually.
+			
+			Note that these IDs are valid for up to 48 hours.</p>
+			</documentation>
+		</annotation>
+	</element>
+
+	<!-- Types -->
+	<complexType name="GetDocumentsByRange">
+		<sequence>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>
+						Security token that must be provided on all authenticated requests.
+					</documentation>
+				</annotation>
+			</element>
+			
+			<!--  [XML CROSS LINKING]: Start -->
+			<element name="crosslinkFlag" type="string" minOccurs="0" maxOccurs="1">
+			<annotation>
+			<documentation>
+				Created a new element for XML Crosslink functionality. 
+				To enable the cross linking functionality, the value to be passed is "Y" or "y"
+			</documentation>
+			</annotation>
+			</element>
+			<!--  [XML CROSS LINKING]:END -->
+			
+			<element name="searchId" type="string">
+			<annotation>
+					<documentation>
+						Identifier that refers to all pertinent information related to the original search.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="classificationId" type="string" minOccurs="0">
+			<annotation>
+					<documentation>
+						Used to retrieve documents from a specific classification.
+					    These identifiers can be obtained using the BrowseResultClassification operation.
+					</documentation>
+				</annotation>
+			</element>
+			<!-- Multiple Classification ID Change starts -->
+			<element name="classificationIdList" type="common:ClassificationIdList" minOccurs="0">
+				<annotation>
+					<documentation>
+						Used to retrieve documents from a list of classifications.
+					    These identifiers can be obtained using the BrowseResultClassification operation.
+					</documentation>
+				</annotation>
+			</element>
+			<!-- Multiple Classification ID Change ends -->
+			<element name="retrievalOptions" type="result:RetrievalOptions">
+				<annotation>
+					<documentation>
+						This structure contains details about how retrieved
+						documents are to be presented.  Also includes the range of documents
+						to return.  If absent, no documents will be returned.
+						Encloses the documentView, documentMarkup, and documentRange elements.
+					</documentation>
+				</annotation>
+			</element>
+			<!-- Dedupe changes start -->
+			<element name="expandedLead" type="integer" minOccurs="0" default="0">
+				<annotation>
+					<documentation>
+						This optional new expandedLead parameter for use by when getting a document cluster,
+						default 0 when not specified.
+					</documentation>
+				</annotation>
+			</element>
+			<!-- Dedupe changes end -->
+		</sequence>
+	</complexType>
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

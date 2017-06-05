@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://searchalertarchives.alert.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://searchalertarchives.alert.services.v1.wsapi.lexisnexis.com" 
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+		xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+		xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com"
+		elementFormDefault="qualified" 
+        attributeFormDefault="unqualified" 
+        version="1.0">
+
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="Security.xsd"/>
+	<import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="Common.xsd"/>
+	<import namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="Result.xsd"/>
+	
+	<element name="SearchAlertArchives" type="tns:SearchAlertArchives">
+		<annotation>
+			<documentation>
+				This operation lets users retrieve detailed information about one of their saved searches.The request message simply identifies the specific saved search of interest. 
+				The corresponding response contains details about that saved search that can be used to build a report. 
+				GetSavedSearchDetails Message Elements
+			</documentation>
+		</annotation>
+	</element>
+	<element name="SearchAlertArchivesResponse" type="tns:SearchAlertArchivesResponse">
+		<annotation>
+			<documentation>
+				Contains information about the client's saved search.
+			</documentation>
+		</annotation>
+	</element>
+
+	<complexType name="SearchAlertArchives">
+		<sequence>
+			<element name="locale" type="common:Locale" minOccurs="0" default="en-US">
+				<annotation>
+					<documentation>
+						Optional locale indicating language of request.  Used when it is 
+      					necessary to distinguish language of certain elements in the request
+                     	parameters (search terms, source selection, etc.)
+					</documentation>
+				</annotation>
+			</element>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>Security token that must be provided on all authenticated 
+                  requests.</documentation>
+				</annotation>
+			</element>
+			<element name="alertId" type="integer">
+				<annotation>
+					<documentation>
+						The profileKey for which details are to be retrieved.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="query" type="string">
+				<annotation>
+					<documentation>
+						The query that is run each time this saved search is executed.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="startDate" type="date" minOccurs="0">
+				<annotation>
+					<documentation>
+						The timestamp that indicates the date of the earliest archieve to include in the search.The date format is:
+						CCYY-MM-DDThh:mm:ss-hh:mm
+					    (GMT with a time zone offset - CCYY = year, MM= month [1-12], DD = day [01-31],
+ 						T= required separator, hh= hour [0-23], mm= minute [0-59], and ss= second [0-59])
+					</documentation>
+
+				</annotation>
+			</element>
+			<element name="endDate" type="date" minOccurs="0">
+				<annotation>
+					<documentation>
+						The timestamp that indicates the date of the latest archieve to include in the search.
+						The date format is:
+						CCYY-MM-DDThh:mm:ss-hh:mm
+					    (GMT with a time zone offset - CCYY = year, MM= month [1-12], DD = day [01-31],
+ 						T= required separator, hh= hour [0-23], mm= minute [0-59], and ss= second [0-59])
+					</documentation>
+
+				</annotation>
+			</element>
+			<element name="retrievalOptions" type="result:RetrievalOptions" minOccurs="0" >
+	        <annotation>
+	          <documentation>
+	            Options pertaining to the view, markup, and range of documents retrieved from 
+	            the result set returned from the search.
+	          </documentation>
+	        </annotation>
+	      </element>
+		</sequence>
+	</complexType>
+
+	<complexType name="SearchAlertArchivesResponse">
+		<sequence>
+			<element name="searchId" type="string">
+				<annotation>
+					<documentation>
+					The search query to be given.
+					</documentation>
+				</annotation>
+			</element>
+		<element name="documentsFound" type="integer">
+				<annotation>
+					<documentation>
+						The number of documents associated with search alert archives .
+					</documentation>
+				</annotation>
+			</element>
+			<element name="documentContainerList" type="result:DocumentContainerList" minOccurs="1">
+				<annotation>
+					<documentation>List of document containers (documents and metadata).</documentation>
+				</annotation>
+			</element>
+			<element name="isSavable" type="boolean">
+				<annotation>
+					<documentation>
+						The documents can be saved or not.
+					</documentation>
+				</annotation>
+			</element>
+			
+		</sequence>
+	</complexType>
+
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

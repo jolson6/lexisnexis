@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://getalertarchives.alert.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://getalertarchives.alert.services.v1.wsapi.lexisnexis.com"              
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+		xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" 
+        attributeFormDefault="unqualified" 
+        version="1.0">
+
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="Security.xsd"/>
+	<import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="Common.xsd"/>
+	
+
+	<element name="GetAlertArchives" type="tns:GetAlertArchives">
+		<annotation>
+			<documentation>
+				This operation retrieves a list of AlertArchives for the corresponding alertID associated with the current authenticated impersonate user. 
+                	</documentation>
+		</annotation>
+	</element>
+	<element name="GetAlertArchivesResponse" type="tns:GetAlertArchivesResponse">
+		<annotation>
+			<documentation>
+				<p>The response message contains the information needed to build a list of AlertArchives for display to the user.It also contains the<strong><em> SearchId</em></strong>for each 
+				Archives.</p>
+		</documentation>
+		</annotation>
+	</element>
+
+	<complexType name="GetAlertArchives">
+	<complexContent>
+	  <extension base="common:BaseRequest">
+		<sequence>
+				<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>Security token that must be provided on all authenticated 
+                  requests.</documentation>
+				</annotation>
+			</element>
+			<element name="alertId" type="integer">
+				<annotation>
+					<documentation>
+						An identifier used to refer to this particular Alert.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="maxarchives" type="integer" minOccurs="0" maxOccurs="1">
+				<annotation>
+					<documentation>
+						An identifier used to provide number of ArchiveResults.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="timeZone" type="string" minOccurs="0">
+                 <annotation>
+                    <documentation>
+                          User prefered timezone. Acceptable timezone formats 
+                          Ex: EST, GMT+6, GMT-530, GMT+0530, GMT-5:30, GMT, GMT+05:30
+                    </documentation>
+                 </annotation>
+             </element>
+			</sequence>
+		</extension>
+  	</complexContent>
+	</complexType>
+
+	<complexType name="GetAlertArchivesResponse">
+		<sequence>
+			<element name="numArchives" type="integer">
+				<annotation>
+					<documentation>
+					Identifies the total number of archives.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="AlertArchiveList" type="tns:AlertArchiveList">
+				<annotation>
+					<documentation>
+						Encloses zero or more AlertArchives.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="AlertArchiveList">
+		<sequence>
+			<element name="AlertArchive" type="tns:AlertArchive" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>
+						Encapsulates metadata about a single alert.
+						Encloses the savedSearchId,name, saveDate, projectId, and lastExecutionDate elements,
+					    which specify the information for each individual alert being reported.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="AlertArchive">
+		<sequence>
+			<element name="searchId" type="string">
+				<annotation>
+					<documentation>
+						An identifier used to refer to this particular alert.
+					</documentation>
+				</annotation>
+			</element>			
+			<element name="date" type="string">
+				<annotation>
+					<documentation>
+						Time stamp indicating the last time that this alert was executed. 
+					</documentation>
+				</annotation>
+			</element>
+			<element name="documentsFound" type="integer">
+				<annotation>
+					<documentation>
+					Identifies the total number of active searches assigned to this user.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2011 by LexisNexis
+  All Rights Reserved
+-->

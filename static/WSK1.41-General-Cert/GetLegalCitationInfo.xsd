@@ -1,0 +1,308 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://getlegalcitationinfo.citator.services.v1.wsapi.lexisnexis.com"
+            xmlns:tns="http://getlegalcitationinfo.citator.services.v1.wsapi.lexisnexis.com"
+            xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+            xmlns:citator="http://citator.common.services.v1.wsapi.lexisnexis.com"
+            xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+            xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+      <!-- Declare imports -->
+      <import namespace="http://common.services.v1.wsapi.lexisnexis.com" 
+                  schemaLocation="Common.xsd"/>
+      <import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" 
+                  schemaLocation="Security.xsd"/>
+      <import namespace="http://citator.common.services.v1.wsapi.lexisnexis.com"
+                  schemaLocation="CitatorCommon.xsd"/>
+      <import namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+                  schemaLocation="Result.xsd"/>
+
+
+      <!-- Define request/response elements -->
+      <element name="GetLegalCitationInfo" type="tns:GetLegalCitationInfo">
+            <annotation><documentation>
+            This call is used to retrieve citation signals given a citation input list, along with lbuId and other
+                        filtering information .
+            
+     </documentation></annotation>
+      </element>
+
+      <element name="GetLegalCitationInfoResponse" type="tns:GetLegalCitationInfoResponse">
+            <annotation>
+            <documentation>
+            Relevant information from the Cite Store for the supplied citation is returned.
+            </documentation>
+            </annotation>
+      </element>
+
+      <!-- Define the request/response types -->
+      <complexType name="GetLegalCitationInfo">
+            <sequence>
+                  <element name="binarySecurityToken" type="security:BinarySecurityToken"  minOccurs="1">
+                        <annotation><documentation>
+                        Security token that must be provided on all non-authentication
+                  requests.  Example: f4348ad8876542bc93748c89fb98a7e
+                        </documentation></annotation>
+                  </element>
+                  <element name="citationInputList" type="tns:CitationInputList"  minOccurs="1" maxOccurs="unbounded">
+                        <annotation>
+                        <documentation>
+                        Structure enclosing a list of text strings, each potentially containing citation type,
+                        case citation and legis citation
+                        </documentation>
+                        </annotation>
+                  </element>
+                  <element name="lbuId" type="string" minOccurs="1">
+                        <annotation>
+                        <documentation>
+                        Contains LBU  ID
+                        </documentation>
+                        </annotation>
+                  </element>
+                <element name="onlyExactMatch" type="boolean" minOccurs="0">
+                        <annotation>
+                              <documentation>
+                              Flag that indicates whether to return exact match only.
+                              </documentation>
+                        </annotation>
+                  </element>
+                  <element name="matchingStrategy" type="integer" minOccurs="0">
+                        <annotation>
+                              <documentation>
+                                    Structure enclosing an integer value which
+                                    defines matching strategy . This is included to
+                                    facililiate Fuzzy Matching logic for lexis check
+                                    app . Possible Values : 0=undefined (default
+                                    matching strategy) 1=top "matchingValue" matches
+                                    based on relevance score 2=top "matchingValue"
+                                    relevancy scores (dense rankings); 3 and above
+                                    are for future matching strategies. This
+                                    parameter is to be used in combination with
+                                    "matchingValue".
+                                    </documentation>
+                        </annotation>
+                  </element>
+                  <element name="matchingValue" type="float" minOccurs="0">
+                        <annotation>
+                              <documentation>
+                                    Structure enclosing a float which defines the
+                                    matching value. This is included to facililiate
+                                    Fuzzy Matching logic for lexis check app.
+
+                                    Possible Values : This parameter is to be used
+                                    in combination with "matchingStrategy". This
+                                    value is ignored if "matchingStrategy" is
+                                    undefined or null.
+                              </documentation>
+                        </annotation>
+                  </element>
+                  <element name="maxNumberOfResults" type="integer" minOccurs="0">
+                        <annotation>
+                              <documentation>
+                                    Structure enclosing a integer to faciliate max
+                                    number of results. This is included to
+                                    facililiate Fuzzy Matching logic for lexis check
+                                    app.
+
+                                    Possible Values : Defined by the Lexis Check
+                                    App.
+                              </documentation>
+                        </annotation>
+                  </element>
+            </sequence>
+      </complexType>
+    <complexType name="CitationInputList">
+            <sequence>
+                <element name="citationType" type="tns:CitationType" minOccurs="1">
+                        <annotation>
+                              <documentation>
+                              Indicates the type of citation
+                              </documentation>
+                        </annotation>
+                  </element>
+                <element name="caseCitation" type="tns:CaseCitation" minOccurs="0">
+                        <annotation>
+                              <documentation>The object that holds information about a case
+                              citation.</documentation>
+                        </annotation>
+                  </element>
+                <element name="legisCitation" type="tns:LegisCitation" minOccurs="0">
+                        <annotation>
+                              <documentation>
+                              The object that holds information about a
+                              legislation citation.
+                              </documentation>
+                        </annotation>
+                  </element>
+            </sequence>
+      </complexType>
+      <simpleType name="CitationType">
+    <restriction base="string">
+      <enumeration value="LMO_CASES"/>
+      <enumeration value="LMO_LEGISLATION"/>
+      <enumeration value="LMO_RULES"/>
+      <enumeration value="LMO_REGULATIONS"/>
+      <enumeration value="LMO_ACT"/>
+      <enumeration value="LMO_MISC"/>
+    </restriction>
+  </simpleType>
+      <complexType name="CaseCitation">
+            <sequence>
+                <element name="caseName" type="string" minOccurs="0">
+                        <annotation>
+                              <documentation>Indicates the case name</documentation>
+                        </annotation>
+                  </element>
+                  <element name="caseCitation" type="string" minOccurs="0">
+                        <annotation>
+                              <documentation>Indicates the citation</documentation>
+                        </annotation>
+                  </element>
+                  <element name="caseOffset" type="string" minOccurs="0">
+                        <annotation>
+                              <documentation>Indicates the length of the caseName and caseCitation</documentation>
+                        </annotation>
+                  </element>
+            </sequence>
+      </complexType>
+      <complexType name="LegisCitation">
+            <sequence>
+                <element name="legisName" type="string" minOccurs="0">
+                        <annotation>
+                              <documentation>Indicates the legislation name</documentation>
+                        </annotation>
+                  </element>
+                  <element name="legisCitation" type="string" minOccurs="0">
+                        <annotation>
+                              <documentation>Indicates the citation</documentation>
+                        </annotation>
+                  </element>
+                  <element name="legisOffset" type="string" minOccurs="0">
+                        <annotation>
+                              <documentation>Indicates the length of the legisName and legisCitation</documentation>
+                        </annotation>
+                  </element>
+            </sequence>
+      </complexType>
+      <complexType name="GetLegalCitationInfoResponse">
+            <sequence>
+                  <element name="citationOutputList" type="tns:CitationOutputList" minOccurs="0" maxOccurs="unbounded">
+                    <annotation><documentation>
+                    <example>ef5bafbd11</example>
+                    Unique identifier that maintains all pertinent information
+                    from the original search.
+                    </documentation></annotation>
+                  </element>
+            </sequence>
+      </complexType>
+      <complexType name="CitationOutputList">
+            <sequence>
+               <element name="citationType" type="tns:CitationType" minOccurs="0">
+                        <annotation>
+                              <documentation>Complex type that indicates the citation type</documentation>
+                        </annotation>
+                  </element>
+                  <element name="caseResult" type="tns:CaseResults" minOccurs="0">
+                        <annotation>
+                              <documentation>Complex type which includes return code and case output</documentation>
+                        </annotation>
+                  </element>
+                  <element name="legisResult" type="tns:LegisResult" minOccurs="0">
+                        <annotation>
+                              <documentation>Complex type which includes return code and legis output</documentation>
+                        </annotation>
+                  </element>
+            </sequence>
+      </complexType>
+      <complexType name="CaseResults">
+            <sequence>
+                <element name="returnCode" type="tns:ReturnCode" minOccurs="0" >
+                        <annotation>
+                              <documentation>this complex type includes parameters such as multimatch,notfound,
+                              notrecognised,successful and thresholdexceeded</documentation>
+                        </annotation>
+                  </element>
+                  <element name="caseOutput" type="tns:CaseOutput" minOccurs="0" maxOccurs="unbounded">
+                        <annotation>
+                              <documentation>complex type which includes citation signal and case name</documentation>
+                        </annotation>
+                  </element>
+            </sequence>
+      </complexType>
+      <simpleType name="ReturnCode">
+    <restriction base="string">
+      <enumeration value="MULTI_MATCH"/>
+      <enumeration value="NOT_FOUND"/>
+      <enumeration value="NOT_RECOGNIZED"/>
+      <enumeration value="SUCCESSFUL"/>
+      <enumeration value="THRESHOLD_EXCEEDED"/>
+    </restriction>
+  </simpleType>
+      <complexType name="CaseOutput">
+            <sequence>
+                <element name="citationSignal" type="string" minOccurs="0">
+                        <annotation>
+                              <documentation>indicates the citation signal</documentation>
+                        </annotation>
+                  </element>
+                  <element name="caseName" type="string" minOccurs="0">
+                        <annotation>
+                              <documentation>Indicates the case name</documentation>
+                        </annotation>
+                  </element>
+                  <element name="caseCitation" type="string" minOccurs="0">
+                        <annotation>
+                              <documentation>indicates the case citation</documentation>
+                        </annotation>
+                  </element>
+                  <element name="fallbackCitation" type="string" minOccurs="0">
+                        <annotation>
+                              <documentation>indicates the fall back citation</documentation>
+                        </annotation>
+                  </element>
+                  <element name="caseOffset" type="string" minOccurs="0">
+                        <annotation>
+                              <documentation>Indicates the length of the caseName and caseCitation</documentation>
+                        </annotation>
+                  </element>
+            </sequence>
+      </complexType>
+      <complexType name="LegisResult">
+            <sequence>
+                <element name="returnCode" type="tns:ReturnCode" minOccurs="0">
+                        <annotation>
+                              <documentation>contains the return code for this case</documentation>
+                        </annotation>
+                  </element>
+                  <element name="legisOutput" type="tns:LegisOutput" minOccurs="0" maxOccurs="unbounded">
+                        <annotation>
+                              <documentation>complex type containing citation signal,legis name and legis citation</documentation>
+                        </annotation>
+                  </element>
+            </sequence>
+      </complexType>
+      <complexType name="LegisOutput">
+            <sequence>
+                <element name="citationSignal" type="string" minOccurs="0">
+                        <annotation>
+                              <documentation>contains the citation signal</documentation>
+                        </annotation>
+                  </element>
+                  <element name="legisName" type="string" minOccurs="0">
+                        <annotation>
+                              <documentation>contains the legis name</documentation>
+                        </annotation>
+                  </element>
+                 <element name="legisCitation" type="string" minOccurs="0">
+                        <annotation>
+                              <documentation>contains the legis citation</documentation>
+                        </annotation>
+                  </element>
+                  <element name="legisOffset" type="string" minOccurs="0">
+                        <annotation>
+                              <documentation>Indicates the length of the legisName and legisCitation</documentation>
+                        </annotation>
+                  </element>
+            </sequence>
+      </complexType>
+</schema>
+                      

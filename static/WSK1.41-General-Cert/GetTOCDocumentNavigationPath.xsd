@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://gettocdocumentnavigationpath.tableofcontents.services.v1.wsapi.lexisnexis.com"
+        xmlns:tns="http://gettocdocumentnavigationpath.tableofcontents.services.v1.wsapi.lexisnexis.com"
+        xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+        xmlns:toccommon="http://common.tableofcontents.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+
+  <import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Common.xsd"/>
+  <import namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Security.xsd"/>
+  <import namespace="http://common.tableofcontents.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="TOCCommon.xsd"/>
+
+  <element name="GetTOCDocumentNavigationPath" type="tns:GetTOCDocumentNavigationPath">
+    <annotation>
+      <documentation>
+	  Use this operation to obtain the navigation path (breadcrumb trail) information to a given document 
+	  within a TOC source. Normally this operation would be used after a user completes a search within a 
+	  TOC source and then selects one of the documents in the results set to view. It provides the publication
+	  tree navigation path information expanded to the node corresponding to the selected 
+	  </documentation>
+    </annotation>
+  </element>
+
+  <element name="GetTOCDocumentNavigationPathResponse" type="toccommon:TOCResponse">
+    <annotation>
+      <documentation>TOC navigation path response sent to the client application.
+      </documentation>
+    </annotation>
+  </element>
+
+  <complexType name="GetTOCDocumentNavigationPath">
+    <sequence>
+      <element name="locale" type="common:Locale" minOccurs="0">
+        <annotation>
+          <documentation>Indicates language of request.</documentation>
+        </annotation>
+      </element>
+      <element name="binarySecurityToken" type="security:BinarySecurityToken">
+        <annotation>
+          <documentation>f4348ad8876542bc93748c89fb98a7e Security token that must
+          be provided on all non-authentication requests.</documentation>
+        </annotation>
+      </element>
+      <element name="documentId" type="string">
+        <annotation>
+          <documentation>An identifier associated with a single LexisNexis document.
+          </documentation>
+        </annotation>
+      </element>
+      <element name="pathType" type="tns:PathType">
+        <annotation>
+          <documentation>Option to indicate whether to retrieve only the TOC "ancestry"
+          or all the top level TOC nodes with the TOC expanded to show the ancestry.</documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType> 
+
+  <simpleType name="PathType">
+    <restriction base="string">
+      <enumeration value="AncestryOnly"/>
+      <enumeration value="TopLevelPlusAncestry"/>
+    </restriction>
+  </simpleType>
+
+</schema>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://getcourtsandpracticeareas.citator.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://getcourtsandpracticeareas.citator.services.v1.wsapi.lexisnexis.com" 
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+        elementFormDefault="qualified" 
+        attributeFormDefault="unqualified" 
+        version="1.0">
+
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" schemaLocation="Security.xsd"/>
+
+	<!-- Define request/response elements -->
+	<element name="GetCourtsAndPracticeAreas" type="tns:GetCourtsAndPracticeAreas">
+		<annotation>
+			<documentation> Request from the client to get the list of COurts and Practice areas.		
+			</documentation>
+		</annotation>
+	</element>
+	<element name="GetCourtsAndPracticeAreasResponse" type="tns:GetCourtsAndPracticeAreasResponse">
+		<annotation>
+			<documentation>Retrieve the list of courts and list of practice 
+							areas from the Cite Store.</documentation>
+		</annotation>
+	</element>
+	
+	<!-- Define request/response types -->
+	<complexType name="GetCourtsAndPracticeAreas">
+		<sequence>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>
+						<example>f4348ad8876542bc93748c89fb98a7e</example>Security token that must be provided on all non-authentication
+                  requests.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	
+	<!-- Response type declarations -->
+    <complexType name="GetCourtsAndPracticeAreasResponse">
+    	<sequence>
+      		<element name="CourtList" type="tns:CourtList">
+        		<annotation>
+        			<documentation>
+       				List of zero or more Courts information.  
+       			    </documentation>
+        		</annotation>
+      		</element>
+      		<element name="PracticeAreaList" type="tns:PracticeAreaList">
+        		<annotation>
+        			<documentation>
+					List of zero or more PracticeAreas information.    
+       				</documentation>
+        		</annotation>
+      		</element>
+    	</sequence>
+  	</complexType>
+  	
+  	<complexType name="CourtList">
+    	<sequence>
+      		<element name="Court" type="tns:Court" maxOccurs="unbounded">
+        		<annotation><documentation>
+        		Structure containing details about the courts. 
+        		</documentation></annotation>
+      		</element>
+      	</sequence>
+  	</complexType>
+  	
+  	<complexType name="PracticeAreaList">
+    	<sequence>
+      		<element name="PracticeArea" type="tns:PracticeArea" maxOccurs="unbounded">
+        		<annotation><documentation>
+        		 Structure containing details about the Practice Areas.
+        		</documentation></annotation>
+      		</element>
+      	</sequence>
+  	</complexType>
+  	
+    
+  	
+  	<complexType name="Court">
+    	<sequence>
+      		<element name="code" type="string">
+        		<annotation><documentation>
+        			The code (or abbreviation) for particular court.
+        		</documentation></annotation>
+      		</element>
+      		<element name="name" type="string">
+        		<annotation><documentation>
+        			The court name.
+        		</documentation></annotation>
+      		</element>
+    	</sequence>
+  	</complexType>
+  	
+  	<complexType name="PracticeArea">
+    	<sequence>
+      		<element name="id" type="int">
+        		<annotation><documentation>
+        			The id (database key) for the practice area.        			
+        		</documentation></annotation>
+      		</element>
+      		<element name="name" type="string">
+        		<annotation><documentation>
+        		 	The display name for the practice area.
+        		</documentation></annotation>
+      		</element>
+    	</sequence>
+  	</complexType>
+  </schema>
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2007 by LexisNexis
+  All Rights Reserved
+-->

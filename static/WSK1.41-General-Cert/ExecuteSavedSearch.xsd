@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://executesavedsearch.savedsearch.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://executesavedsearch.savedsearch.services.v1.wsapi.lexisnexis.com" 
+        xmlns:common="http://common.savedsearch.services.v1.wsapi.lexisnexis.com" 
+		xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com"
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+        xmlns:commonType="http://common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" 
+        attributeFormDefault="unqualified" 
+        version="1.0">
+<!-- Deduplication (10/06/2010)
+Author:PeriasVx : Added Similarity and LeadDocumentType element -->  
+	<import namespace="http://common.savedsearch.services.v1.wsapi.lexisnexis.com"
+        	schemaLocation="SavedSearchCommon.xsd" />           
+
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+        	schemaLocation="Security.xsd" />
+
+	<import namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="Result.xsd" />
+
+	<import namespace="http://common.search.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="SearchCommon.xsd" />
+			
+	<import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Common.xsd"/>
+
+	<element name="ExecuteSavedSearch" type="tns:ExecuteSavedSearch">
+		<annotation>
+			<documentation>
+				This operation is used to recall and run a previously saved search. It uses the <strong><em>savedSearchId</em></strong> key that was provided when the search was originally saved to identify 
+				which saved search to run.This key is also supplied in the<strong><em> ListSavedSearchesResponse</em></strong> message.
+			</documentation>
+		</annotation>
+	</element>
+
+	<element name="ExecuteSavedSearchResponse" type="result:SearchResponse">
+		<annotation>
+			<documentation>
+				The response message will contain any new documents that were found since the last time this search was run. The message structure is similar to the response 
+				message returned by the Search operation.
+			</documentation>
+		</annotation>
+	</element>
+
+	<complexType name="ExecuteSavedSearch">
+		<sequence>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>
+						Security token that must be provided on all authenticated requests.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="savedSearchId" type="integer">
+				<annotation>
+					<documentation>
+						Saved Search ID to be executed.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="sortOrder" type="result:SortOrder" minOccurs="0" default="Implied">
+				<annotation>
+					<documentation>
+						Identifies how the results set should be sorted before delivery. 
+					Implied - Use the sort option that is recommended for this type of source. 
+					Relevance - The documents that best satisfy the user's search criteria are delivered first. 
+					Date - The most recent documents are delivered first.
+
+					</documentation>
+				</annotation>
+			</element>
+			<element name="retrievalOptions" type="result:RetrievalOptions" minOccurs="0">
+				<annotation>
+					<documentation>
+						If present, this structure contains details about how retrieved
+						documents are to be presented.  If absent, no documents will be
+						returned.
+						Encloses the documentView , documentMarkup and documentRange 
+						elements which define a series of retrieval options.
+					</documentation>
+				</annotation>
+			</element>
+			<!-- Dedupe changes Start -->
+			<element name="dedupeParams" type="commonType:DedupeParams" minOccurs="0">
+		        <annotation>
+		          <documentation>
+		            Options pertaining to the De-duplication (Similarity Threshold and Lead Document Type).
+		          </documentation>
+		        </annotation>			
+			</element>
+			<!-- Dedupe changes Start -->
+		</sequence>
+	</complexType>
+
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

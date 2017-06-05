@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+		targetNamespace="http://browseindexterms.index.services.v1.wsapi.lexisnexis.com" 
+		xmlns:tns="http://browseindexterms.index.services.v1.wsapi.lexisnexis.com"
+        xmlns:common="http://common.services.v1.wsapi.lexisnexis.com" 
+        xmlns:indexcommon="http://indexcommon.index.services.v1.wsapi.lexisnexis.com" 
+		xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+		elementFormDefault="qualified" 
+		attributeFormDefault="unqualified" 
+		version="1.0">
+
+	<import namespace="http://indexcommon.index.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="IndexCommon.xsd"/>
+
+	<import namespace="http://common.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="Common.xsd"/>
+
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="Security.xsd"/>
+
+	<!-- Define request/response elements -->
+	<element name="BrowseIndexTerms" type="tns:BrowseIndexTerms">
+		<annotation>
+			<documentation>
+			<br></br> 
+			This operation lets users to traverse a tree-like taxonomy of LexisNexis indexing terms. A unique taxonomy identifier (<strong><em>taxonomyId</em></strong>) retrieved from the 
+			<strong><em>GetIndexTermTaxonomies</em></strong> operation is required. Optionally, a term identifier (<strong><em>indexTermId</em></strong>) retrieved from this operation may be provided.
+			
+		    
+			</documentation>
+		</annotation>
+	</element>
+	<element name="BrowseIndexTermsResponse" type="tns:BrowseIndexTermsResponse">
+		<annotation>
+			<documentation>The response message returns a list of indexing sub-terms, if a term identifier was provided, or a list of top-level indexing terms; if a term identifier was not provided, as 
+			well as the current position in the taxonomy.
+			</documentation>
+		</annotation>
+	</element>
+
+	<!-- Define request/response types -->
+	<complexType name="BrowseIndexTerms">
+		<sequence>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>
+						Security token that must be provided on all non-authentication
+                       requests.Example: f4348ad8876542bc93748c89fb98a7e</documentation>
+				</annotation>
+			</element>
+			<element name="indexTermTaxonomyId" type="string" minOccurs="1" maxOccurs="1">
+				<annotation>
+					<documentation>An identifier that represents the taxonomy to be browsed. 
+					This id was enclosed by the taxonomyId element which was returned in the 
+					GetIndexTermTaxonomiesResponse message.</documentation>
+				</annotation>
+			</element>
+			<element name="indexTermId" type="string" minOccurs="0" maxOccurs="1">
+				<annotation>
+					<documentation>An identifier that is associated with a particular term in the index term taxonomy. If not provided, browsing will begin at the top node of the taxonomy. 
+					Note that this id was obtained during a previous use of this or the SearchIndexTerms operation.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="BrowseIndexTermsResponse">
+		<sequence>
+			<element name="indexTermList" type="indexcommon:IndexTermList">
+				<annotation>
+					<documentation>Encloses zero or more indexTerm elements.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+</schema>
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

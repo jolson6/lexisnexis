@@ -1,0 +1,370 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://getgroupsourcemembernames.source.services.v1.wsapi.lexisnexis.com"
+	xmlns:tns="http://getgroupsourcemembernames.source.services.v1.wsapi.lexisnexis.com"
+	xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+	xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	version="1.0">
+
+	<import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+		schemaLocation="Common.xsd" />
+
+
+	<import
+		namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+		schemaLocation="Security.xsd" />
+
+	<!-- Define request/response elements -->
+	<element name="GetGroupSourceMemberNames"
+		type="tns:GetGroupSourceMemberNames">
+		<annotation>
+			<documentation>
+				This call is designed to return the members of a group source
+                along with with the name of the group source. An indicator 
+                called isAGroup will be returned as well. If the source passed 
+                in was NOT a group, this will be set to false, and the 
+                memberSourceList object will not be populated. The groupSource 
+                object will be populated with the CSI and SourceName of the source 
+                passed in either way. If the user is not entitled to the source, 
+                an SDSNoSourcesEntitled exception will be thrown
+			</documentation>
+		</annotation>
+	</element>
+	<element name="GetGroupSourceMemberNamesResponse"
+		type="tns:GetGroupSourceMemberNamesResponse">
+		<annotation>
+			<documentation>
+				Creates a new GetGroupSourceMemberNamesReturn object.
+			</documentation>
+		</annotation>
+	</element>
+
+	<!-- Define request type -->
+	<complexType name="GetGroupSourceMemberNames">
+		<sequence>
+			<element name="binarySecurityToken"
+				type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>
+						Security token that must be provided on all
+						non-authentication requests. Example:
+						f4348ad8876542bc93748c89fb98a7e
+					</documentation>
+				</annotation>
+			</element>
+			<element name="localeDisplayName" type="string">
+				<annotation>
+					<documentation>
+						The resultant string after concatenating
+						language country code.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="maxSourceResults" type="integer"
+				minOccurs="0">
+				<annotation>
+					<documentation>
+						The limit of sources to return.
+                        The Default, 0, means no limit.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="sourceId" type="integer" minOccurs="0">
+				<annotation>
+					<documentation>
+						<example>7944</example>
+						The CSI of the group source.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="userInformation" type="tns:UserInformation">
+				<annotation>
+					<documentation>
+						This is a list of packages representing user
+						subscriptions and entitlements.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="UserInformation">
+		<sequence>
+			<element name="contentSubscriptionLastChangedDate"
+				type="date" minOccurs="0">
+				<annotation>
+					<documentation>
+						This is the most recent date that any of the
+						data that is stored in the Content Subscription
+						changed.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="contentSubscriptionsList"
+				type="tns:ContentSubscriptionsList" minOccurs="0">
+				<annotation>
+					<documentation>
+						List of ContentSubscription objects.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="lbuID" type="string" minOccurs="0">
+				<annotation>
+					<documentation>The LbuID.</documentation>
+				</annotation>
+			</element>
+			<element name="menuList" type="tns:MenuList"
+				minOccurs="0">
+				<annotation>
+					<documentation>List of Menu objects.</documentation>
+				</annotation>
+			</element>
+			<element name="packageName" type="string" minOccurs="0">
+				<annotation>
+					<documentation>The Package Name.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="ContentSubscriptionsList">
+		<sequence>
+			<element name="contentSubscription"
+				type="tns:ContentSubscription" minOccurs="0"
+				maxOccurs="unbounded">
+				<annotation>
+					<documentation>
+						Content Subscription is used to store groups of
+						content. It will hold information about when the
+						users access to specified content will begin and
+						end, and how it will be billed and the number of
+						users that can access the content at the same
+						time.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="ContentSubscription">
+		<sequence>
+			<element name="contentTypeId" type="string" minOccurs="0">
+				<annotation>
+					<documentation>The Content Type.</documentation>
+				</annotation>
+			</element>
+			<element name="lbuAssignedIdForContentSubscription"
+				type="string" minOccurs="0">
+				<annotation>
+					<documentation>
+						This is an ID assigned by the LBU for this
+						contentsubscription
+					</documentation>
+				</annotation>
+			</element>
+			<element name="name" type="string" minOccurs="0">
+				<annotation>
+					<documentation>
+						This is the name of the Content Subscription.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="promotionalIndicator" type="string" minOccurs="0">
+				<annotation>
+					<documentation>
+						This tells if the Content Subscription is part
+						of a promotion and what type of promotion it is
+						a part of.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="promotionalMarketCode" type="string" minOccurs="0">
+				<annotation>
+					<documentation>
+						The Promotional Market Code.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="sourcePackagesList"
+				type="tns:SourcePackagesList" minOccurs="0">
+				<annotation>
+					<documentation>
+						a list of SourcePackage objects
+					</documentation>
+				</annotation>
+			</element>
+			<element name="subscriptionId" type="string" minOccurs="0">
+				<annotation>
+					<documentation>
+						This is the Web Subscription that this Content
+						Subscritpion is tied to.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="SourcePackagesList">
+		<sequence>
+			<element name="sourcePackage" type="tns:SourcePackage"
+				minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Source Package.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="SourcePackage">
+		<sequence>
+			<element name="sourcePackageId" type="string" minOccurs="0">
+				<annotation>
+					<documentation>
+						This should Either be T for Transactional or S
+						for Subscriptional
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="MenuList">
+		<sequence>
+			<element name="menu" type="tns:Menu" minOccurs="0"
+				maxOccurs="unbounded">
+				<annotation>
+					<documentation>
+						Object containing information about a menu
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="Menu">
+		<sequence>
+			<element name="action" type="string" minOccurs="0">
+				<annotation>
+					<documentation>
+						Returns an Indicator telling if the the webmenu
+						is present.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="displayName" type="string" minOccurs="0">
+				<annotation>
+					<documentation>The menu display name</documentation>
+				</annotation>
+			</element>
+			<element name="menuIndicator" type="string" minOccurs="0">
+				<annotation>
+					<documentation>
+						Returns the menu indicator.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="menuName" type="string" minOccurs="0">
+				<annotation>
+					<documentation>The menu name</documentation>
+				</annotation>
+			</element>
+			<element name="menuType" type="string" minOccurs="0">
+				<annotation>
+					<documentation>
+						Returns the menu type.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="webName" type="string" minOccurs="0">
+				<annotation>
+					<documentation>The web name</documentation>
+				</annotation>
+			</element>
+			<element name="mergedMenu" type="boolean" minOccurs="0">
+				<annotation>
+					<documentation>True = Merged Menu.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<!-- Define response type -->
+	<complexType name="GetGroupSourceMemberNamesResponse">
+		<sequence>
+			<element name="groupSource" type="tns:SimpleSource" minOccurs="0">
+				<annotation>
+					<documentation>This will only be populated if isAGroup is true</documentation>
+				</annotation>
+			</element>
+			<element name="memberHasTocList" type="tns:MemberHasTocList" minOccurs="0">
+				<annotation>
+					<documentation>
+						This list of booleans will correspond to the 
+                        list of members returned. If the member source 
+                        has an associated toc, then the same element of
+                        this list will have a value of true. 
+					</documentation>
+				</annotation>
+			</element>
+			<element name="memberSourceList" type="tns:MemberSourceList"
+				minOccurs="0">
+				<annotation>
+					<documentation>
+						List of Member SimpleSource objects.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="isAGroup" type="boolean" minOccurs="0">
+				<annotation>
+					<documentation>
+						  If the csi passed in to this request
+                          was not a group CSI then this value
+                          will be false
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="MemberHasTocList">
+		<sequence>
+			<element name="MemberHasToc" type="boolean" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>
+						 This list of booleans will correspond 
+						 to the list of members returned.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="MemberSourceList">
+		<sequence>
+			<element name="memberSource" type="tns:SimpleSource" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>
+						Object containing information about a menu
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="SimpleSource">
+		<sequence>
+			<element name="csi" type="integer" minOccurs="0">
+				<annotation>
+					<documentation>
+						Common Source Identifier
+					</documentation>
+				</annotation>
+			</element>
+			<element name="name" type="string" minOccurs="0">
+				<annotation>
+					<documentation>Name of the source.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+</schema>
+<!--
+	LexisNexis CONFIDENTIAL
+	
+	This document is the property of LexisNexis, and its contents are
+	proprietary to LexisNexis. Reproduction in any form is prohibited.
+	Finders are asked to return this document to:
+	LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+	
+	Copyright (c) 2007 by LexisNexis
+	All Rights Reserved
+-->

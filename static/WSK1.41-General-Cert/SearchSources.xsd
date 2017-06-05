@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://searchsources.source.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://searchsources.source.services.v1.wsapi.lexisnexis.com" 
+        xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+        xmlns:sourcecommon="http://common.source.services.v1.wsapi.lexisnexis.com" 
+        elementFormDefault="qualified" 
+        attributeFormDefault="unqualified" 
+        version="1.0">
+
+  <import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Common.xsd"/>
+
+   <import namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+           schemaLocation="Security.xsd" />           
+
+   <import namespace="http://common.source.services.v1.wsapi.lexisnexis.com"
+           schemaLocation="SourceCommon.xsd" />           
+
+   <!-- Define request/response elements -->
+   <element name="SearchSources" type="tns:SearchSources">
+      <annotation>
+         <documentation>
+         <p>
+         This operation is used to find sources where the source's name contains the string of characters specified in this request. This operation searches the entire 
+         LexisNexis source directory, listing each matching source only once. Thus, the function does not provide information about where in the source tree the source was found.</p>
+		 <p>
+		 This operation requires that some portion of a source name be provided as input. A specific folder, indicating the point at which the search should begin, can also
+	     be specified.</p>
+
+		 <blockquote>
+		 <b>Note:</b> Normally the <i><b>BrowseSources</b></i> operation is used to create a representation of the folder structure for your users and to obtain the <i><b>folderIds</b></i>.If they 
+		 then select a specific folder as a starting point for their search, the corresponding <i><b>folderId</b></i> can be used as an input for this operation.
+  		 <P></P>
+		 </blockquote>
+		 </documentation>
+      </annotation>
+   </element>
+   <element name="SearchSourcesResponse" type="tns:SearchSourcesResponse">
+      <annotation>
+         <documentation>
+            <p>The response message contains a list of the names and IDs of those available sources that matched the search criteria.</p>
+         
+         </documentation>
+      </annotation>
+   </element>
+         
+   <!-- Define request/response types -->
+   <complexType name="SearchSources">
+      <sequence>
+         <element name="locale" type="common:Locale">
+			<annotation>
+				<documentation>
+					Optional locale indicating language of request.
+				</documentation>
+			</annotation>
+		 </element>
+         <element name="binarySecurityToken" type="security:BinarySecurityToken">
+            <annotation>
+               <documentation>
+                  <example>f4348ad8876542bc93748c89fb98a7e</example>
+                  Security token that must be provided on all non-authentication
+                  requests.
+               </documentation>
+            </annotation>
+         </element>
+         <element name="FolderId" type="integer" minOccurs="0">
+            <annotation>
+               <documentation>
+                  Identifies the folder within the source directory from which the search will begin.
+				  If this element is empty, the search will begin at the top of the source directory.
+               </documentation>
+            </annotation>
+         </element>
+         <element name="partialSourceName" type="string">
+            <annotation>
+               <documentation>
+                  <example>The New York Times</example>
+                  Contains a string of characters that should appear in either the actual name of the publication
+				  or the name given to a group of publications.
+               </documentation>
+            </annotation>
+         </element>
+          <element name="useCSP" type="boolean" minOccurs="0">
+            <annotation>
+              <documentation>
+                Use Combined Search Pricing Rules/Logic.
+				Intended for internal LexisNexis use only.
+			 </documentation>
+            </annotation>
+          </element>
+      </sequence>
+   </complexType>
+      
+   <complexType name="SearchSourcesResponse">
+      <sequence>
+         <element name="sourceList" type="sourcecommon:SourceList">
+            <annotation>
+               <documentation>
+                  The list of sources that satisfy the search request.
+               </documentation>
+            </annotation>
+         </element>
+      </sequence>
+   </complexType>   
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

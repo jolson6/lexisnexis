@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://getalertdetails.alert.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://getalertdetails.alert.services.v1.wsapi.lexisnexis.com" 
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+        xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com" 
+		xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+		elementFormDefault="qualified" 
+        attributeFormDefault="unqualified" 
+        version="1.0">
+
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="Security.xsd"/>
+	<import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="Common.xsd"/>
+	<import namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Result.xsd"/>			
+	
+	<element name="GetAlertDetails" type="tns:GetAlertDetails">
+		<annotation>
+			<documentation>
+				This operation lets users retrieve detailed information about one of their Alerts.
+				The request message simply identifies the specific Alert of interest. 
+				The corresponding response contains details about that Alert that can be used to build a report. 
+				Alert Message Elements
+			</documentation>
+		</annotation>
+	</element>
+	<element name="GetAlertDetailsResponse" type="tns:GetAlertDetailsResponse">
+		<annotation>
+			<documentation>
+				Contains information about the client's Alerts.
+			</documentation>
+		</annotation>
+	</element>
+
+	<complexType name="GetAlertDetails">
+		<sequence>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>Security token that must be provided on all authenticated 
+                  requests.</documentation>
+				</annotation>
+			</element>
+			<element name="alertId" type="integer">
+				<annotation>
+					<documentation>
+						The profileKey for which details are to be retrieved.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="timeZone" type="string" minOccurs="0">
+                 <annotation>
+                    <documentation>
+                          User prefered timezone. Acceptable timezone formats 
+                          Ex: EST, GMT+6, GMT-530, GMT+0530, GMT-5:30, GMT, GMT+05:30
+                    </documentation>
+                 </annotation>
+             </element>
+		</sequence>
+	</complexType>
+
+	<complexType name="GetAlertDetailsResponse">
+		<sequence>
+			<element name="alertDetails" type="tns:AlertDetails">
+				<annotation>
+					<documentation>
+						Encapsulates metadata about a single Alert.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="AlertDetails">
+		<sequence>
+			<element name="name" type="tns:GetAlertName">
+				<annotation>
+					<documentation>
+						The name associated with this Alert.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="description" type="string">
+				<annotation>
+					<documentation>
+						A description (optional) associated with this Alert.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="saveDate" type="string">
+				<annotation>
+					<documentation>
+						The timestamp that indicates when this Alert was saved.
+					</documentation>
+
+				</annotation>
+			</element>
+			<element name="locale" type="common:Locale">
+				<annotation>
+					<documentation>
+						The language in which this Alert was saved.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="projectId" type="common:ProjectId">
+				<annotation>
+					<documentation>
+						The project ID associated with this Alert.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="query" type="string">
+				<annotation>
+					<documentation>
+						The query that is run each time this Alert is executed.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="sourceIdList" type="common:SourceIdList">
+				<annotation>
+					<documentation>
+						The list of sources that this Alert is executed against.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="sortOrder" type="result:SortOrder">
+				<annotation>
+					<documentation>
+					Identifies how the results set will be sorted before deliver. 
+					Implied - Use the sort option that is recommended for this type of source. 
+					Relevance - The documents that best satisfy the user's search criteria are delivered first. 
+					Date - The most recent documents are delivered first.
+
+					</documentation>
+				</annotation>
+			</element>
+			<element name="lastExecution" type="tns:LastExecution" minOccurs="0">
+				<annotation>
+					<documentation>
+						Metadata about the last time this Alert was executed.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="schedule" type="tns:Schedule">
+				<annotation>
+					<documentation>
+						Metadata about the last time this Alert was executed.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<simpleType name="GetAlertName">
+		<restriction base="string">
+			<maxLength value="255"/>
+		</restriction>
+	</simpleType>
+	<complexType name="LastExecution">
+		<sequence>
+			<element name="searchId" type="string">
+				<annotation>
+					<documentation>
+						An opaque identifier used to refer to this execution's results.
+						If no results were found, no searchId is generated.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="date" type="string">
+				<annotation>
+					<documentation>
+						
+						This time stamp identifies when this search was run. 
+
+					</documentation>
+				</annotation>
+			</element>
+			<element name="documentsFound" type="integer">
+				<annotation>
+					<documentation>
+						The number of documents found during this execution.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="Schedule">
+		<sequence>
+			<element name="updateFrequency" type="string">
+				<annotation>
+					<documentation>
+						The begin index for this range.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="daylightSavings" type="boolean">
+				<annotation>
+					<documentation>
+						The end index for this range.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="timezone" type="string" minOccurs="0">
+				<annotation>
+					<documentation>
+						The end index for this range.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="nextScheduledUpdate" type="string" minOccurs="0">
+				<annotation>
+					<documentation>
+						Time stamp indicating the Next Schedule of this alert. 
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2011 by LexisNexis
+  All Rights Reserved
+-->

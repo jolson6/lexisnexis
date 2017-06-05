@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://search.search.services.v1.wsapi.lexisnexis.com"
+        xmlns:tns="http://search.search.services.v1.wsapi.lexisnexis.com"
+        xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+        xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com"
+        xmlns:searchcommon="http://common.search.services.v1.wsapi.lexisnexis.com"
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"
+        version="1.0">
+<!-- 
+ XML CrossLinking WebStar - 3295585 (19/07/2010)
+Author: KumerVD: Added a new element "crosslinkFlag" for XML CROSS LINKING Functionality
+ -->
+<!-- Deduplication (10/06/2010)
+Author:PeriasVx : Added the new ComplexType DedupeParams -->        
+  <import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Common.xsd"/>
+  <import namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Result.xsd"/>
+  <import namespace="http://common.search.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="SearchCommon.xsd"/>
+  <import namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Security.xsd"/>
+
+  <!-- Message elements -->
+  <element name="Search" type="tns:Search">
+    <annotation>
+      <documentation>
+        <p>
+			This operation lets users locate specific documents within the LexisNexis 
+			information warehouse by specifying a series of restrictions that indicate 
+			where to look (which sources) and what to look for. These restrictions can 
+			specify items such as...
+			<ul>
+				<li>
+				only look in these publications (sources),</li>
+				<li>
+				the candidate documents must have been published within this specific date 
+				range,</li>
+				<li>
+				these words or phrases (search terms) should or shouldn't appear within the 
+				document,</li>
+				<li>
+				and they must have this specific relationship to each other (both present, 
+				either present, one present but not the other, present within a specified 
+				proximity, etc.).</li>
+			</ul>
+		</p>
+		<p>
+			Some users may not need or want to define this level of precision in their search request. Therefore, this operation contains a<i><b>searchMethod</b></i>option which allows 
+			users (or your user-agent applications) to choose among several different types of searching methods. The<b><i>MatchOnAllWords</i></b>,<b><i>MatchOnAnyWords</i></b>,and<b><i>
+			MatchOnPhrase</i></b> selections are similar to the types of search logic used by several popular search engines used on the Web.They are primarily used for gathering 
+			general information about a particular topic.The<b><i>Boolean</i></b>selection is for users who need to create custom searches to locate specific pieces of information.It lets 
+			them use special search term connectors (AND,OR,W/n,etc.)to specify specific search term relationships.</p>
+		<p>
+			The<b><i>Search</i></b>operation also lets your user-agent applications specify how the search results set should be delivered. They can specify a specific display format(a cite 
+			listing,the full document text,etc.),the markup method(in XHTML or using a more descriptive markup such as NITF), the sort order (by date, by relevance, or by the 
+			source's recommended method),and the range of documents within the results set to be delivered.</p>
+		
+      </documentation>
+    </annotation>
+  </element>
+
+  <element name="SearchResponse" type="result:SearchResponse">
+    <annotation>
+      <documentation>
+      		The response message will contain the search results in the requested format.Most applications initially request that the documents be delivered in a list (such as the <b>
+			Cite</b>format)because it contains summary information about each document found.The brief excerpt from the document makes it easier for a user to decide whether or 
+			not the document in question is relevant to his/her needs.Each search result item will also include a unique document identifier(valid for a short period of 48 hours or 
+			less)that is used to retrieve the full text of a requested document.
+        
+      </documentation>
+    </annotation>
+  </element>
+
+  <!-- Types -->
+  <complexType name="Search">
+  	<complexContent>
+	  <extension base="common:BaseRequest">
+	    <sequence>
+	      <element name="binarySecurityToken" type="security:BinarySecurityToken">
+	        <annotation>
+	          <documentation>
+	            <example>f4348ad8876542bc93748c89fb98a7e</example>
+	            Security token that must be provided on all non-authentication
+	            requests.
+	          </documentation>
+	        </annotation>
+	      </element>
+	      <element name="sourceInformation" type="searchcommon:SourceInformationChoice">
+	        <annotation>
+	          <documentation>
+	               Either a list of source identifiers or a single secured 
+	              source identifier.
+	          </documentation>
+	        </annotation>
+	      </element>
+	      <element name="query" type="string">
+	        <annotation>
+	          <documentation>
+	            <example>cats and dogs and hamsters</example>
+	              Query string for the search request, formatted in the 
+	              appropriate syntax for the selected search method.
+	          </documentation>
+	        </annotation>
+	      </element>
+	      <element name="projectId" type="common:ProjectId" minOccurs="0">
+	        <annotation>
+	          <documentation>
+	            <example>Research Project 001</example>
+	            This can be up to 32 user-defined characters used to associate this research with a
+				specific project or client.This information will appear on the search results pages 
+				and on the invoice sent to your organization.
+	             </documentation>
+	        </annotation>
+	      </element>
+	      <element name="searchOptions" type="searchcommon:SearchOptions" minOccurs="0">
+	        <annotation>
+	          <documentation>
+	            Encloses the dateRestriction, searchMethod, sortOrder, and 
+				ignoreCommonWords elements which define a series of search options.
+	          </documentation>
+	        </annotation>
+	      </element>
+	      
+	      <!-- MORELIKESELECTEDTEXT : Start -->
+	      <element name="mandatoryTerms" type="string" minOccurs="0">
+			<annotation>
+			<documentation>
+				Mandatory Terms is only used if we select the search option as MoreLikeSelected else
+				it will not be considered. It helps to search with some mandatory terms.
+			</documentation>
+			</annotation>
+			</element>
+			<!--MORELIKESELECTEDTEXT End -->
+	      <!--  [XML CROSS LINKING]: Start -->
+			<element name="crosslinkFlag" type="string" minOccurs="0" maxOccurs="1">
+			<annotation>
+			<documentation>
+				Created a new element for XML Crosslink functionality. 
+				To enable the cross linking functionality, the value to be passed is "Y" or "y"
+			</documentation>
+			</annotation>
+			</element>
+			<!--  [XML CROSS LINKING]:END -->
+			<!-- Deduplication changes - starts -->
+			<element name="dedupeParams" type="common:DedupeParams" minOccurs="0">
+		        <annotation>
+		          <documentation>
+		            Options pertaining to the De-duplication (Similarity Threshold and Lead Document Type).
+		          </documentation>
+		        </annotation>			
+			</element>
+			<!-- Deduplication changes - ends -->
+	      <element name="retrievalOptions" type="result:RetrievalOptions" minOccurs="0">
+	        <annotation>
+	          <documentation>
+	            Options pertaining to the view, markup, and range of documents retrieved from 
+	            the result set returned from the search.
+	          </documentation>
+	        </annotation>
+	      </element>
+	      <element name="useCSP" type="boolean" minOccurs="0">
+	        <annotation>
+	          <documentation>
+              Use Combined Search Pricing Rules/Logic.Intended for internal LexisNexis use only
+	          </documentation>
+	        </annotation>
+	      </element>
+	      <element name="continueId" type="string" minOccurs="0">
+	        <annotation>
+	          <documentation>
+              This is an identifier to continue to a previously attempted
+              search that was too general for normal processing.
+	          </documentation>
+	        </annotation>
+	      </element>
+	    </sequence>
+	  </extension>
+  	</complexContent>
+  </complexType>
+
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

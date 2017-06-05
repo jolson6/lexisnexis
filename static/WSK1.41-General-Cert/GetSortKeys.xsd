@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://getsortkeys.resultsorting.services.v1.wsapi.lexisnexis.com" 
+		xmlns:tns="http://getsortkeys.resultsorting.services.v1.wsapi.lexisnexis.com"
+        xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com" 
+		xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+		elementFormDefault="qualified" 
+		attributeFormDefault="unqualified" 
+		version="1.0">
+
+	<import namespace="http://result.common.services.v1.wsapi.lexisnexis.com" 
+		schemaLocation="Result.xsd"/>
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" 
+		schemaLocation="Security.xsd"/>
+
+	<!-- Define request/response elements -->
+	<element name="GetSortKeys" type="tns:GetSortKeys">
+		<annotation>
+			<documentation>
+			   <p>This operation retrieves a list of the <strong><em> sort keys </em></strong> that are common to all the documents within a specific search results set.
+			   They can then be used to let users choose how they would like their search results set to be resorted and presented to them.</p>
+			   
+			   <p>The request message only needs to identify the specific search results set for which a list of it's common sort keys is being requested. </p>
+		   
+			</documentation>
+		</annotation>
+	</element>
+	<element name="GetSortKeysResponse" type="tns:GetSortKeysResponse">
+		<annotation>
+			<documentation>
+				<p>The response message contains a list of sort key names and their corresponding IDs for the specified search results set. 
+			   These names can be used in the sort request utility UI presented to your users and the IDs when the request to reorder their search results based on their selections is issued.</p> 
+		</documentation>
+		</annotation>
+	</element>
+
+	<!-- Define request/response types -->
+	<complexType name="GetSortKeys">
+		<sequence>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>
+						<example>f4348ad8876542bc93748c89fb98a7e</example>
+						Security token that must be provided on all non-authentication requests.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="searchId" type="string">
+				<annotation>
+					<documentation>
+						<example>ef5bafbd11</example>
+						Unique identifier that maintains all pertinent information
+                        from the original search.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="GetSortKeysResponse">
+		<sequence>
+			<element name="sortKeyList" type="tns:SortKeyList">
+				<annotation>
+					<documentation>
+						A list of sort key values by which the results could be sorted.Encloses zero or more sortKey elements.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="SortKeyList">
+		<sequence>
+			<element name="sortKey" type="tns:SortKey" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>
+						A single key by which the results can be sorted.Encloses the name and sortId elements associated with a specific sort key.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="SortKey">
+		<sequence>
+			<element name="name" type="string">
+				<annotation>
+					<documentation>
+						A readable name that describes this sort key.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="sortId" type="string">
+				<annotation>
+					<documentation>
+						Unique identifier that contains the necessary information to
+						sort results using this key.  One or more sortId values can be
+						used as input for SortResults.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+</schema>

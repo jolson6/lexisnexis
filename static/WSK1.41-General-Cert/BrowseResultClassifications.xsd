@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+		targetNamespace="http://browseresultclassifications.classification.services.v1.wsapi.lexisnexis.com" 
+		xmlns:tns="http://browseresultclassifications.classification.services.v1.wsapi.lexisnexis.com"
+		xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+        xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+		elementFormDefault="qualified" 
+		attributeFormDefault="unqualified" 
+		version="1.0">
+
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" 
+	        schemaLocation="Security.xsd"/>
+
+	<import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Common.xsd"/>
+
+	<!-- Define request/response elements -->
+	<element name="BrowseResultClassifications" type="tns:BrowseResultClassifications">
+		<annotation>
+			<documentation>
+			<p>When this operation is first used, the <strong><em>searchId</em></strong> element will be used to identify the specific search results set to be classified. The response message will contain
+			information about the top level node of each taxonomy available for those specific search results. Those applications can then use this newly acquired information to
+			start building a navigation mechanism that your users can use to drill down into the various taxonomies and their branches.</p>
+			<br></br><br></br>
+			<p>As the user navigates through the navigation mechanism, additional <strong><em>BrowseResultClassifications</em></strong> operations can be used as needed to populate it. Each operation 
+			will provide information about the specific node specified and the items it contains.</p>
+			
+			 </documentation>
+		</annotation>
+	</element>
+	<element name="BrowseResultClassificationsResponse" type="tns:BrowseResultClassificationsResponse">
+		<annotation>
+			<documentation> 
+				<p>
+			The output message identifies each node's...
+			<ul>
+			<li><strong><em>classificationId</em></strong> -- This is used to 
+  			identify a specific node within a taxonomy's structure. </li>
+			<br></br><br></br>
+			<li><strong><em>name</em></strong> -- This is a short label that normally 
+  			describes the topic(s) covered under this node. This label can be used in the 
+ 			navigation mechanism displayed to your users. </li>
+			<br></br><br></br>
+			<li><strong><em>documentCount</em></strong> -- This identifies the number of documents available directly under that node.  Note that this operation does not identify the documents 
+			themselves.However the <strong><em>GetDocumentsByRange</em></strong> operation, along with the node's <strong><em>classificationId</em></strong>, could be used to retrieve 
+  			them. </li>
+			<br></br><br></br>
+			<li><strong><em>hasChildren</em></strong> -- This flag indicates that there are additional sub-nodes under this one.  The <strong><em>BrowseResultClassifications</em></strong> operation could be used again, along 
+			with this node's <strong><em>classificationId</em></strong>, to retrieve information about each of those sub-nodes. </li>
+			<br></br><br></br>
+			<li><strong><em>unclassified</em></strong> -- This flag indicated that this node has not been classified.</li>
+ 			</ul>
+			</p>
+			</documentation>
+		</annotation>
+	</element>
+
+	<!-- Define request/response types -->
+	<complexType name="BrowseResultClassifications">
+		<sequence>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>
+						Security token that must be provided on all 
+						non-authentication requests.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="searchId" type="string">
+				<annotation>
+					<documentation>
+						Unique identifier that maintains all pertinent information
+                        from the original search.</documentation>
+				</annotation>
+			</element>
+			<element name="classificationId" type="string" minOccurs="0">
+				<annotation>
+					<documentation>
+						 An indentifier for the classification node.  
+					</documentation>
+				</annotation>
+			</element>
+			<element name="orderBy" type="tns:OrderBy" minOccurs="0">
+				<annotation>
+					<documentation>
+						Specifies the order in which returned classification nodes are to be returned.
+						By default, this will be alphabetical.  This element can also specify that nodes
+						be returned ordered by document count (high to low).  The Unclassified node
+						will always return last in the list, regardless of document count.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="listType" type="tns:ListType" minOccurs="0">
+				<annotation>
+					<documentation>
+						Specifies the type of list to be returned.  By default listType is Hierarchy,
+						and the list returned will be a slice of the classification taxonomy (a
+						single level in the tree).  This element can also specify that all
+						classification nodes be returned in a flat list, with no regard for
+						the taxonomy hierarchy.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<simpleType name="OrderBy">
+		<restriction base="string">
+			<enumeration value="Name" />
+			<enumeration value="DocumentCount" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="ListType">
+		<restriction base="string">
+			<enumeration value="Hierarchy" />
+			<enumeration value="Flat" />
+		</restriction>
+	</simpleType>
+
+	<complexType name="BrowseResultClassificationsResponse">
+		<sequence>
+			<element name="classificationList" type="tns:ClassificationList">
+				<annotation>
+					<documentation>
+					Encloses the one or more classification elements.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="ClassificationList">
+		<sequence>
+			<element name="classification" type="tns:Classification" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>
+					Encloses elements that provide information about a node located directly under the requested node.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="Classification">
+		<sequence>
+			<element name="classificationId" type="string">
+				<annotation>
+					<documentation>
+						An identifier for the classification node.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="name" type="string">
+				<annotation>
+					<documentation>
+						The name of the classification node.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="documentCount" type="integer">
+				<annotation>
+					<documentation>
+					The number of documents corresponding to the 
+					classification node.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="hasChildren" type="boolean">
+				<annotation>
+					<documentation>
+						A flag indicates if the classification node has any
+						children.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="unclassified" type="boolean">
+				<annotation>
+					<documentation>
+						A flag indicates if the classification node is
+						unclassified.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+</schema>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://listsavedsearches.savedsearch.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://listsavedsearches.savedsearch.services.v1.wsapi.lexisnexis.com" 
+        xmlns:savedsearch="http://common.savedsearch.services.v1.wsapi.lexisnexis.com" 
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+		xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" 
+        attributeFormDefault="unqualified" 
+        version="1.0">
+
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="Security.xsd"/>
+	<import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="Common.xsd"/>
+	<import namespace="http://common.savedsearch.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="SavedSearchCommon.xsd"/>
+
+	<element name="ListSavedSearches" type="tns:ListSavedSearches">
+		<annotation>
+			<documentation>
+				This operation retrieves a list of previously saved searches associated with the current authenticated user. 
+                	</documentation>
+		</annotation>
+	</element>
+	<element name="ListSavedSearchesResponse" type="tns:ListSavedSearchesResponse">
+		<annotation>
+			<documentation>
+				<p>The response message contains the information needed to build a list of saved searches for display to the user.It also contains the<strong><em> savedSearchId</em></strong>for each 
+				saved search.This ID will be needed when requesting to recall and run or delete a specific search.</p>
+		</documentation>
+		</annotation>
+	</element>
+
+	<complexType name="ListSavedSearches">
+		<sequence>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>Security token that must be provided on all authenticated 
+                  requests.</documentation>
+				</annotation>
+			</element>
+			<element name="savedSearchRange" type="tns:SavedSearchRange" minOccurs="0">
+				<annotation>
+					<documentation>
+						The range of saved searches to retrieve.  Due to the possibility of a large number of
+						saved searches, they must be retrieved in chunks of up to 50.
+						Contains the begin and end elements which identify the range of saved searches to be retrieved. 
+
+						Note: This range is based on the order in which the searches were saved. 
+						The oldest saved search is listed first and the newest saved search is listed last.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="ListSavedSearchesResponse">
+		<sequence>
+			<element name="savedSearchesFound" type="integer">
+				<annotation>
+					<documentation>
+					Identifies the total number of active searches assigned to this user.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="savedSearchList" type="tns:SavedSearchList">
+				<annotation>
+					<documentation>
+						Encloses zero or more savedSearch elements each of which provide information about one of the saved searches.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="SavedSearchList">
+		<sequence>
+			<element name="savedSearch" type="tns:SavedSearch" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>
+						Encapsulates metadata about a single saved search.
+						Encloses the savedSearchId,name, saveDate, projectId, and lastExecutionDate elements,
+					    which specify the information for each individual saved search being reported.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="SavedSearch">
+		<sequence>
+			<element name="savedSearchId" type="integer">
+				<annotation>
+					<documentation>
+						An identifier used to refer to this particular saved search.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="name" type="savedsearch:SavedSearchName">
+				<annotation>
+					<documentation>
+						The name associated with this saved search.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="saveDate" type="dateTime">
+				<annotation>
+					<documentation>
+						Contains a time stamp indicating the last time that this saved search was executed. The format is: 
+
+						CCYY-MM-DDThh:mm:ss-hh:mm
+						(GMT with a time zone offset - CCYY = year, MM= month [1-12], DD = day [01-31],
+						 T= required separator, hh= hour [0-23], mm= minute [0-59], and ss= second [0-59])
+					</documentation>
+				</annotation>
+			</element>
+			<element name="projectId" type="common:ProjectId">
+				<annotation>
+					<documentation>
+						The project ID associated with this saved search.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="lastExecutedDate" type="dateTime">
+				<annotation>
+					<documentation>
+						Timestamp indicating the last time that this saved search was executed.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="SavedSearchRange">
+		<sequence>
+			<element name="begin" type="integer">
+				<annotation>
+					<documentation>
+						The begin index for this range.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="end" type="integer">
+				<annotation>
+					<documentation>
+						The end index for this range.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

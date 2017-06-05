@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+        targetNamespace="http://getdocumentsbydocumentid.retrieve.services.v1.wsapi.lexisnexis.com" 
+        xmlns:tns="http://getdocumentsbydocumentid.retrieve.services.v1.wsapi.lexisnexis.com" 
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+		xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" 
+        attributeFormDefault="unqualified" 
+        version="1.0">
+<!-- 
+[XML CROSS LINKING]
+Author: BandarNB: Added a new element "crosslinkFlag" for XML CROSS LINKING Functionality
+Date 03-08-10.
+ -->
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+        	schemaLocation="Security.xsd" />
+
+	<import namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+			schemaLocation="Result.xsd" />
+
+	<!-- Message elements -->
+	<element name="GetDocumentsByDocumentId" type="tns:GetDocumentsByDocumentId">
+		<annotation>
+			<documentation>
+			<br></br>
+			<p>
+			Normally the initial search results are requested to be delivered in the <i><b>Cite</b></i> or a similar list-type format. This lets users review the list and choose the ones they would 
+			like to review in more detail. Since the <b><i>SearchResponse</i></b>and <b><i>GetDocumentsByRangeResponse</i></b> messages contain the <b><i>documentId</i></b>for each document they deliver, 
+			those IDs could be used to retrieve specific documents in full text or some other format and/or markup.
+			</p>
+			</documentation>
+		</annotation>
+	</element>
+
+	<element name="GetDocumentsByDocumentIdResponse" type="result:RetrievalResponse">
+		<annotation>
+			<documentation>
+			The response message contains the one or more documents specified in the requested format and markup.
+			</documentation>
+		</annotation>
+	</element>
+
+	<!-- Types -->
+	<complexType name="GetDocumentsByDocumentId">
+		<sequence>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>
+						Security token that must be provided on all authenticated requests.
+					</documentation>
+				</annotation>
+			</element>
+			
+			<!--  [XML CROSS LINKING]: Start -->
+			<element name="crosslinkFlag" type="string" minOccurs="0" maxOccurs="1">
+			<annotation>
+			<documentation>
+				Created a new element for XML Crosslink functionality. 
+				To enable the cross linking functionality, the value to be passed is "Y" or "y"
+			</documentation>
+			</annotation>
+			</element>
+			<!--  [XML CROSS LINKING]:END -->
+			<element name="documentIdList" type="tns:DocumentIdList">
+			<annotation>
+			<documentation>
+			   Encloses one or more documentId elements each of which identifies a specific document to be retrieved.
+			   </documentation>
+			</annotation>
+			</element>
+			<element name="retrievalOptions" type="tns:RetrievalOptions" minOccurs="0">
+			<annotation>
+			<documentation>
+			  Encloses the documentView, documentMarkup, and documentRange elements.
+			  </documentation>
+			</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="DocumentIdList">
+		<sequence>
+			<element name="documentId" type="string" minOccurs="1" maxOccurs="unbounded">
+				<annotation>
+					<documentation>
+						Contains a unique identifier that independently represents a document for up to 48 hours.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="RetrievalOptions">
+		<sequence>
+		
+			
+			<element name="documentView" type="result:DocumentView" minOccurs="0">
+				<annotation>
+					<documentation>
+						The display format in which the documents will be delivered. The default display format is source-specific. 
+
+						Note: Please refer to the Glossary section of this guide for descriptions of these display formats.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="documentMarkup" type="result:DocumentMarkup" minOccurs="0">
+				<annotation>
+					<documentation>
+					Identifies the desired XML markup type for document formatting.
+				    The default markup is the most appropriate markup for the content type. 
+					</documentation>
+				</annotation>
+			</element>
+			<element name="includeExtendedOutput" type="boolean" minOccurs="0">
+				<annotation>
+					<documentation>
+						<example>true</example>
+					</documentation>
+				</annotation>
+			</element>
+			<element name="includeShepardsSignals" type="boolean" minOccurs="0">
+				<annotation>
+					<documentation>
+					  Allows the retrieval of Shepard's Signals.
+						<example>true</example>
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

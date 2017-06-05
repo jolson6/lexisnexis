@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+		targetNamespace="http://savesearch.savedsearch.services.v1.wsapi.lexisnexis.com" 
+		xmlns:tns="http://savesearch.savedsearch.services.v1.wsapi.lexisnexis.com" 
+		xmlns:common="http://common.savedsearch.services.v1.wsapi.lexisnexis.com" 
+		xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+		xmlns:search="http://result.common.services.v1.wsapi.lexisnexis.com" 
+		elementFormDefault="qualified" 
+		attributeFormDefault="unqualified" 
+		version="1.0">
+
+	<import namespace="http://common.savedsearch.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="SavedSearchCommon.xsd"/>
+
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="Security.xsd"/>
+
+	<import namespace="http://result.common.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="Result.xsd"/>
+
+	<!-- Define request/response elements -->
+	<element name="SaveSearch" type="tns:SaveSearch">
+		<annotation>
+			<documentation>
+               <p>This operation lets your users request that one of their favorite searches be saved under the unique name of their choice. They can then use that name to recall and
+			   rerun that search from time to time to obtain the most current information available about the topic.</p>
+
+               <p>Your online service applications must provide the <strong><em>searchId</em></strong> information received when the search was originally run and the name (and optionally a short description) 
+			   users want to use to recall it.</p>
+
+			       </documentation>
+		</annotation>
+	</element>
+	<element name="SaveSearchResponse" type="tns:SaveSearchResponse">
+		<annotation>
+			<documentation>I<p>The response message contains a unique identifier that refers to this saved search. This identifier will be used by other functions to identify this specific saved search.</p>
+         .</documentation>
+		</annotation>
+	</element>
+
+	<!-- Define request/response types -->
+	<complexType name="SaveSearch">
+		<sequence>
+			<element name="binarySecurityToken" type="security:BinarySecurityToken">
+				<annotation>
+					<documentation>
+						Security token that must be provided on all authenticated requests.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="name" type="common:SavedSearchName">
+				<annotation>
+					<documentation>
+						A name to be associated with the saved search.
+					</documentation>
+				</annotation>
+			</element>
+			<element name="description" type="string" minOccurs="0">
+				<annotation>
+					<documentation>A description to be associated with the saved search.</documentation>
+				</annotation>
+			</element>
+			<element name="searchId" type="string">
+				<annotation>
+					<documentation>
+						The searchId associated with a previously executed WSAPI search.  The search criteria
+						associated with this searchId will be saved.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="SaveSearchResponse">
+		<sequence>
+			<element name="savedSearchId" type="integer">
+				<annotation>
+					<documentation>
+						The savedSearchId that can be used in future requests to reference this saved search.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+</schema>
+
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2004 by LexisNexis
+  All Rights Reserved
+-->

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://searchbytoc.tableofcontents.services.v1.wsapi.lexisnexis.com"
+	xmlns:tns="http://searchbytoc.tableofcontents.services.v1.wsapi.lexisnexis.com"
+	xmlns:common="http://common.services.v1.wsapi.lexisnexis.com"
+	xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com"
+	xmlns:searchbytocresult="http://searchbytocresult.common.services.v1.wsapi.lexisnexis.com"
+	xmlns:searchcommon="http://common.search.services.v1.wsapi.lexisnexis.com"
+	xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	version="1.0">
+	<import namespace="http://common.services.v1.wsapi.lexisnexis.com"
+		schemaLocation="Common.xsd" />
+	<import
+		namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+		schemaLocation="Result.xsd" />
+	<import
+		namespace="http://common.search.services.v1.wsapi.lexisnexis.com"
+		schemaLocation="SearchCommon.xsd" />
+	<import
+		namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+		schemaLocation="Security.xsd" />
+	<import
+		namespace="http://searchbytocresult.common.services.v1.wsapi.lexisnexis.com"
+		schemaLocation="SearchByTOCResult.xsd" />
+
+	<!-- Message elements -->
+	<element name="SearchByTOC" type="tns:SearchByTOC">
+		<annotation>
+			<documentation>
+				<p>
+					This operation lets users locate TOCspecific documents
+					within the LexisNexis information warehouse by
+					specifying a series of restrictions that indicate
+					where to look (which sources) and what to look for.
+					These restrictions can specify items such as...
+					<ul>
+						<li>
+							only look in these publications (sources),
+						</li>
+						<li>
+							the candidate documents must have been
+							published within this specific tableofcontents,
+						</li>
+						<li>
+							these words or phrases (search terms) should 
+							appear within the document,
+						</li>
+						<li>
+							and they must have this specific
+							relationship to each other (both present,
+							either present, one present but not the
+							other, present within a specified proximity,
+							etc.).
+						</li>
+					</ul>
+				</p>
+				<p>
+					The
+					<b>
+						<i>SearchByTOC</i>
+					</b>
+					operation also lets your user-agent applications
+					specify how the searchByTOC results set should be
+					delivered. They can specify a specific display
+					format(a cite listing,the full document
+					text,etc.),the markup method(in XHTML or using a
+					more descriptive markup such as NITF), the sort
+					order (by date, by relevance, or by the source's
+					recommended method),and the range of documents
+					within the results set to be delivered.
+				</p>
+
+			</documentation>
+		</annotation>
+	</element>
+
+	<element name="SearchByTOCResponse"
+		type="searchbytocresult:SearchByTOCResponse">
+		<annotation>
+			<documentation>
+				The response message will contain the searchByTOC results in
+				the requested format.Most applications initially request
+				that the documents be delivered in a list (such as the
+				<b>Cite</b>
+				format)because it contains summary information about
+				each document found.The brief excerpt from the document
+				makes it easier for a user to decide whether or not the
+				document in question is relevant to his/her needs.Each
+				searchByTOC result item will also include a unique document
+				identifier(valid for a short period of 48 hours or
+				less)that is used to retrieve the full text of a
+				requested document.
+
+			</documentation>
+		</annotation>
+	</element>
+	<complexType name="SearchOptions">
+		<sequence>
+			<element name="ignoreCommonWords" type="boolean"
+				minOccurs="0" default="true">
+				<annotation>
+					<documentation>
+						Flag to instruct the search engine whether or
+						not to ignore &quot;noise&quot; words in the
+						search request.
+					</documentation>
+				</annotation>
+			</element>
+
+			<element name="sortOrder" type="result:SortOrder"
+				minOccurs="0" default="Implied">
+				<annotation>
+					<documentation>
+						<example>Implied</example>
+						Strategy used to sort the results of the search.
+						Implied indicates that the sort order is chosen
+						to best fit the search method employed and the
+						type of content that is returned.
+					</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="TocNodeIdList">
+		<sequence>
+			<element ref="tns:tocNodeId" minOccurs="1"
+				maxOccurs="unbounded">
+				<annotation>
+					 <documentation>Identifier for the "related" source for which the TOC is being  requested.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<element name="tocNodeId" type="string">
+		<annotation>
+          <documentation>Identifier for the "related" source for which the TOC is being
+          requested.</documentation>
+        </annotation>
+	</element>
+
+	<!-- Types -->
+	<complexType name="SearchByTOC">
+		<complexContent>
+			<extension base="common:BaseRequest">
+				<sequence>
+					<element name="binarySecurityToken"
+						type="security:BinarySecurityToken">
+						<annotation>
+							<documentation>
+								<example>
+									f4348ad8876542bc93748c89fb98a7e
+								</example>
+								Security token that must be provided on
+								all non-authentication requests.
+							</documentation>
+						</annotation>
+					</element>
+					<element name="sourceId" type="integer"
+						minOccurs="1" maxOccurs="1">
+						<annotation>
+							<documentation>
+								Unique identifier for a standard
+								LexisNexis source.
+							</documentation>
+						</annotation>
+					</element>
+
+					<element name="tocNodeIdList"
+						type="tns:TocNodeIdList" minOccurs="1">
+						<annotation>
+							<documentation>
+								A grouping of Table of content nodeId's.
+							</documentation>
+						</annotation>
+					</element>
+
+
+					<element name="query" type="string">
+						<annotation>
+							<documentation>
+								<example>
+									cats and dogs and hamsters
+								</example>
+								Query string for the searchByTOC request,
+								formatted in the appropriate syntax for
+								the selected search method.
+							</documentation>
+						</annotation>
+					</element>
+					<element name="projectId" type="common:ProjectId"
+						minOccurs="0">
+						<annotation>
+							<documentation>
+								<example>Research Project 001</example>
+								This can be up to 32 user-defined
+								characters used to associate this
+								research with a specific project or
+								client.This information will appear on
+								the search results pages and on the
+								invoice sent to your organization.
+							</documentation>
+						</annotation>
+					</element>
+					<element name="searchOptions"
+						type="tns:SearchOptions" minOccurs="0">
+						<annotation>
+							<documentation>
+								sortOrder, and ignoreCommonWords elements which define
+								a series of search options.
+							</documentation>
+						</annotation>
+					</element>
+
+
+					<element name="retrievalOptions"
+						type="result:RetrievalOptions" minOccurs="0">
+						<annotation>
+							<documentation>
+								Options pertaining to the view, markup,
+								and range of documents retrieved from
+								the result set returned from the search.
+							</documentation>
+						</annotation>
+					</element>
+					<element name="useCSP" type="boolean"
+						minOccurs="0">
+						<annotation>
+							<documentation>
+								Use Combined Search Pricing
+								Rules/Logic.Intended for internal
+								LexisNexis use only
+							</documentation>
+						</annotation>
+					</element>
+
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+</schema>
+
+<!--
+	LexisNexis CONFIDENTIAL
+	
+	This document is the property of LexisNexis, and its contents are
+	proprietary to LexisNexis. Reproduction in any form is prohibited.
+	Finders are asked to return this document to:
+	LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+	
+	Copyright (c) 2011 by LexisNexis
+	All Rights Reserved
+-->

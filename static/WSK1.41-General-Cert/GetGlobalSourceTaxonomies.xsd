@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+		targetNamespace="http://getglobalsourcetaxonomies.globalsourcedirectory.services.v1.wsapi.lexisnexis.com" 
+		xmlns:tns="http://getglobalsourcetaxonomies.globalsourcedirectory.services.v1.wsapi.lexisnexis.com"
+    xmlns:common="http://common.services.v1.wsapi.lexisnexis.com" 
+		xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com" 
+		elementFormDefault="qualified" 
+		attributeFormDefault="unqualified" 
+		version="1.0">
+
+	<import namespace="http://common.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="Common.xsd"/>
+
+	<import namespace="http://security.common.services.v1.wsapi.lexisnexis.com" 
+			schemaLocation="Security.xsd"/>
+
+	<!-- Define request/response elements -->
+	<element name="GetGlobalSourceTaxonomies" type="tns:GetGlobalSourceTaxonomies">
+		<annotation>
+			<documentation>Allows a user to retrieve global source taxonomies based
+			on the user's locale.</documentation>
+		</annotation>
+	</element>
+	<element name="GetGlobalSourceTaxonomiesResponse" type="tns:GetGlobalSourceTaxonomiesResponse">
+		<annotation>
+			<documentation>Returns a list of taxonomies.
+			</documentation>
+		</annotation>
+	</element>
+
+	<!-- Define request/response types -->
+	<complexType name="GetGlobalSourceTaxonomies">
+		<complexContent>
+			<extension base="common:BaseRequest">
+				<sequence>
+					<element name="binarySecurityToken" type="security:BinarySecurityToken">
+						<annotation>
+							<documentation>
+								Security token that must be provided on all non-authentication
+                  requests.  Example: f4348ad8876542bc93748c89fb98a7e</documentation>
+						</annotation>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="GetGlobalSourceTaxonomiesResponse">
+		<sequence>
+			<element name="taxonomyList" type="tns:GlobalSourceTaxonomyList">
+				<annotation>
+					<documentation>A list of taxonomies.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="GlobalSourceTaxonomyList">
+		<sequence>
+			<element name="globalSourceTaxonomy" type="tns:GlobalSourceTaxonomy" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>A global source taxonomy.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="GlobalSourceTaxonomy">
+		<sequence>
+			<element name="globalSourceTaxonomyId" type="string">
+				<annotation>
+					<documentation>A global source taxonomyId.  Example: af987...90bc</documentation>
+				</annotation>
+			</element>
+			<element name="name" type="string">
+				<annotation>
+					<documentation>The taxonomy's name.  Example: Publication Type</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+</schema>
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2007 by LexisNexis
+  All Rights Reserved
+-->

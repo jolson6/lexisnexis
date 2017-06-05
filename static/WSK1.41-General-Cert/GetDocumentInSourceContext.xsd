@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://getdocumentinsourcecontext.retrieve.services.v1.wsapi.lexisnexis.com"
+        xmlns:tns="http://getdocumentinsourcecontext.retrieve.services.v1.wsapi.lexisnexis.com"
+        xmlns:result="http://result.common.services.v1.wsapi.lexisnexis.com"
+        xmlns:scresult="http://sourcecontextresult.common.services.v1.wsapi.lexisnexis.com"
+        xmlns:security="http://security.common.services.v1.wsapi.lexisnexis.com"
+        elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+
+  <import namespace="http://security.common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Security.xsd"/>
+  <import namespace="http://result.common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="Result.xsd"/>
+  <import namespace="http://sourcecontextresult.common.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="SourceContextResult.xsd"/>
+  <import namespace="http://common.search.services.v1.wsapi.lexisnexis.com"
+          schemaLocation="SearchCommon.xsd"/>
+
+  <!-- Message elements -->
+  <element name="GetDocumentInSourceContext" type="tns:GetDocumentInSourceContext">
+    <annotation>
+      <documentation>Allows a client to retrieve a document with source context
+	  information such as sourceContextId, and relevant previous/next document information.</documentation>
+    </annotation>
+  </element>
+
+  <element name="GetDocumentInSourceContextResponse" type="scresult:SourceContextRetrievalResponse">
+    <annotation>
+      <documentation>Returns the document requested by the client.</documentation>
+    </annotation>
+  </element>
+
+  <!-- Types -->
+  <complexType name="GetDocumentInSourceContext">
+    <sequence>
+      <element name="binarySecurityToken" type="security:BinarySecurityToken">
+        <annotation>
+          <documentation>Security token that must be provided on all authenticated requests.</documentation>
+        </annotation>
+      </element>
+      <element name="documentId" type="string">
+        <annotation>
+          <documentation>Represents the "point of reference" document from
+          which the previous or next document in the source will be taken.</documentation>
+        </annotation>
+      </element>
+      <element name="documentFormatOptions" type="result:DocumentFormatOptions" minOccurs="0">
+        <annotation>
+          <documentation>Optional element that defines the particular document 
+        view and markup in which documents are to be retrieved.</documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+</schema>
+<!--
+                      LexisNexis CONFIDENTIAL
+
+  This document is the property of LexisNexis, and its contents are
+  proprietary to LexisNexis. Reproduction in any form is prohibited.
+  Finders are asked to return this document to:
+  LexisNexis, P.O. Box 933, Dayton, Ohio  45401
+
+  Copyright (c) 2005 by LexisNexis
+  All Rights Reserved
+-->
